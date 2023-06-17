@@ -1,4 +1,4 @@
 ﻿namespace CostsSettler.Domain.Models;
-public class Circumstance
+public class Circumstance : ModelBase
 {
 }
