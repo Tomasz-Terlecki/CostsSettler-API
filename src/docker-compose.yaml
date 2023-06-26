@@ -9,6 +9,11 @@ services:
       dockerfile: ./CostsSettler.API/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=mssql,1433; Database=CostsSettler_Dev; User Id=sa; Password=Password!23; TrustServerCertificate=True
+      - KeycloakClientConfig__Realm=CostsSettler
+      - KeycloakClientConfig__AuthServerUrl=http://keycloak:8080/
+      - KeycloakClientConfig__Secret=WPmKFcPu4sN2DE0E9P9fyktx66iv5BG7
+      - KeycloakClientConfig__ClientId=CostsSettler-API
     depends_on:
       - mssql
     ports:
