@@ -6,7 +6,7 @@ namespace CostsSettler.API.Controllers;
 
 [ApiController]
 [Route("/api/[Controller]")]
-public class UsersController
+public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -20,8 +20,8 @@ public class UsersController
     {
         var result = await _mediator.Send(new GetUsersQuery());
 
-        if (result == null)
-            return new BadRequestObjectResult("Getting users failed");
+        if (result is null)
+            return BadRequest("Getting users failed");
 
         return new OkObjectResult(result);
     }
