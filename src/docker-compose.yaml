@@ -30,7 +30,9 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:21.1
-    command: start-dev
+    command: -v start-dev --import-realm
+    volumes:
+      - C:\Users\Tomasz\Documents\studia\CostsSettler-API\keycloak:/opt/keycloak/data/import
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
