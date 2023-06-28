@@ -38,9 +38,11 @@ public class UserRepository : IUserRepository
         return _mapper.Map<ICollection<User>>(users) ?? new List<User>();
     }
 
-    public Task<User?> GetByIdAsync(Guid id)
+    public async Task<User?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var user = await _keycloakClient.GetUserByIdAsync(id, await GetAccessToken());
+
+        return _mapper.Map<User>(user);
     }
 
     public Task<bool> UpdateAsync(User model)
