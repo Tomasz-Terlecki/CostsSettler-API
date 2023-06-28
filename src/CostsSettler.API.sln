@@ -5,13 +5,18 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CostsSettler.API", "CostsSettler.API\CostsSettler.API.csproj", "{48A1275C-1237-45C2-B5CA-C306C908E426}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostsSettler.Domain", "CostsSettler.Domain\CostsSettler.Domain.csproj", "{F31761F2-FA07-4E1D-973B-4147200DCE58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CostsSettler.Domain", "CostsSettler.Domain\CostsSettler.Domain.csproj", "{F31761F2-FA07-4E1D-973B-4147200DCE58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostsSettler.Repo", "CostsSettler.Repo\CostsSettler.Repo.csproj", "{0536A400-2199-4CB4-8955-E8F0EB688C7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CostsSettler.Repo", "CostsSettler.Repo\CostsSettler.Repo.csproj", "{0536A400-2199-4CB4-8955-E8F0EB688C7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostsSettler.Auth", "CostsSettler.Auth\CostsSettler.Auth.csproj", "{44282EFB-DC67-4FF7-A848-AA2945E1EBE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CostsSettler.Auth", "CostsSettler.Auth\CostsSettler.Auth.csproj", "{44282EFB-DC67-4FF7-A848-AA2945E1EBE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostsSettler.Notifier", "CostsSettler.Notifier\CostsSettler.Notifier.csproj", "{6C694627-971A-4684-95C6-AA9D4E03BBB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CostsSettler.Notifier", "CostsSettler.Notifier\CostsSettler.Notifier.csproj", "{6C694627-971A-4684-95C6-AA9D4E03BBB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32B4884F-86F8-402E-ABC9-B55E9241B171}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yaml = docker-compose.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
