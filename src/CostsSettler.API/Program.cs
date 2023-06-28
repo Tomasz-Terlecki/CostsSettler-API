@@ -1,4 +1,5 @@
 using CostsSettler.API.Extensions;
+using CostsSettler.API.Middlewares;
 using CostsSettler.Domain.Profiles;
 using CostsSettler.Domain.Queries;
 using CostsSettler.Repo;
@@ -51,6 +52,8 @@ if (env.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<CostsSettlerExceptionMiddleware>();
 
 app.UseCors("AllowAll");
 
