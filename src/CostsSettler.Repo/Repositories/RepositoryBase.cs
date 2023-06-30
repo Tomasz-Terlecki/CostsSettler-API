@@ -27,9 +27,9 @@ public abstract class RepositoryBase<TModel> : IRepositoryBase<TModel>
     {
         var result = await _dbContext.Set<TModel>().AddAsync(model);
 
-        await _dbContext.SaveChangesAsync();
+        var saveChangesResult = await _dbContext.SaveChangesAsync();
 
-        return result.State == EntityState.Added;
+        return saveChangesResult > 0;
     }
 
     public virtual async Task<bool> UpdateAsync(TModel model)
