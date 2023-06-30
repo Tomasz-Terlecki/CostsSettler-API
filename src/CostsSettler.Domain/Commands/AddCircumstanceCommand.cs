@@ -25,6 +25,9 @@ public class AddCircumstanceCommand : IRequest<bool>
 
         public async Task<bool> Handle(AddCircumstanceCommand request, CancellationToken cancellationToken)
         {
+            if (request.DebtorsIds.Contains(request.CreditorId))
+                throw new ObjectReferenceException($"The creditor cannot be added as debtor");
+
             foreach (var userId in request.DebtorsIds)
                 if (userId == Guid.Empty || !(await _userRepository.ExistsAsync(userId)))
                     throw new ObjectReferenceException($"The use of id {userId} does not exist");
