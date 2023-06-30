@@ -26,9 +26,11 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> ExistsAsync(Guid id)
+    public async Task<bool> ExistsAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var user = await _keycloakClient.GetUserByIdAsync(id, await GetAccessToken());
+
+        return user is not null && user.Id != Guid.Empty;
     }
 
     public async Task<ICollection<User>> GetAllAsync()
