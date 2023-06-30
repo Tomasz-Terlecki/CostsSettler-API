@@ -18,9 +18,15 @@ public abstract class RepositoryBase<TModel> : IRepositoryBase<TModel>
         return await _dbContext.Set<TModel>().ToListAsync();
     }
 
-    public virtual async Task<TModel?> GetByIdAsync(Guid id)
+    public virtual async Task<TModel?> GetByIdAsync(Guid id, string[]? includes = null)
     {
-        return await _dbContext.Set<TModel>().FirstOrDefaultAsync(model => model.Id == id);
+        var query = _dbContext.Set<TModel>().AsQueryable();
+
+        if (includes is not null)
+            foreach (var item in includes)
+                query = query.Include(item);
+
+        return await query.SingleOrDefaultAsync(model => model.Id == id);
     }
 
     public virtual async Task<bool> AddAsync(TModel model)
