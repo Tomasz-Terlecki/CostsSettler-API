@@ -1,7 +1,7 @@
 using CostsSettler.API.Extensions;
 using CostsSettler.API.Middlewares;
 using CostsSettler.Domain.Profiles;
-using CostsSettler.Domain.Queries.Circumstance;
+using CostsSettler.Domain.Queries;
 using CostsSettler.Repo;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;

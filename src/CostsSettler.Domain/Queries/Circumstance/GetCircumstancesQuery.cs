@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CostsSettler.Domain.Dtos.Circumstance;
+using CostsSettler.Domain.Dtos;
 using CostsSettler.Domain.Interfaces.Repositories;
 using MediatR;
 
-namespace CostsSettler.Domain.Queries.Circumstance;
+namespace CostsSettler.Domain.Queries;
 public class GetCircumstancesQuery : IRequest<ICollection<CircumstanceForListDto>>
 {
     public class GetCircumstancesQueryHandler : IRequestHandler<GetCircumstancesQuery, ICollection<CircumstanceForListDto>>

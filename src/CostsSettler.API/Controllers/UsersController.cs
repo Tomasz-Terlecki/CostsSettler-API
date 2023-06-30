@@ -1,4 +1,4 @@
-﻿using CostsSettler.Domain.Queries.User;
+﻿using CostsSettler.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

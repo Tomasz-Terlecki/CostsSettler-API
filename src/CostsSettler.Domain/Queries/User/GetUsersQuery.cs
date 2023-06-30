@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CostsSettler.Domain.Dtos.User;
+using CostsSettler.Domain.Dtos;
 using CostsSettler.Domain.Interfaces.Repositories;
 using MediatR;
 
-namespace CostsSettler.Domain.Queries.User;
+namespace CostsSettler.Domain.Queries;
 public class GetUsersQuery : IRequest<ICollection<UserForListDto>>
 {
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ICollection<UserForListDto>>

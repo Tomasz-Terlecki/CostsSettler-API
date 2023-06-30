@@ -1,4 +1,4 @@
-﻿namespace CostsSettler.Domain.Dtos.User;
+﻿namespace CostsSettler.Domain.Dtos;
 public class UserForListDto
 {
     public Guid Id { get; set; }
