@@ -1,4 +1,5 @@
-﻿using CostsSettler.Domain.Queries;
+﻿using CostsSettler.Domain.Commands;
+using CostsSettler.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,5 +27,16 @@ public class MemberChargeController : ControllerBase
         }
 
         return Ok(charges);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> SettleCharge([FromBody] SettleChargeCommand command)
+    {
+        var isSuccess = await _mediator.Send(command);
+
+        if (!isSuccess)
+        {
+            return BadRequest($"Could not settle charge of Id {command.MemberChargeId}");
+        }
     }
 }
