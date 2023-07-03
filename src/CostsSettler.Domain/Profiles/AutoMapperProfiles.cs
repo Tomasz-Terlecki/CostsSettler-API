@@ -13,5 +13,10 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<Circumstance, CircumstanceForListDto>();
         CreateMap<Circumstance, CircumstanceForReturnDto>();
+
+        CreateMap<MemberCharge, MemberChargeForListDto>()
+            .ForMember(
+                dst => dst.CircumstanceDescription, 
+                opt => opt.MapFrom(src => src.Circumstance.Description));
     }
 }

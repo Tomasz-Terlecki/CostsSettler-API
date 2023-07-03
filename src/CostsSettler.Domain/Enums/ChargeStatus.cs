@@ -1,6 +1,7 @@
 ﻿namespace CostsSettler.Domain.Enums;
 public enum ChargeStatus : byte
 {
-    New = 0,
-    Settled = 1,
+    None = 0,
+    New = 1,
+    Settled = 2
 }
