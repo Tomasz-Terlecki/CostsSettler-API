@@ -7,17 +7,17 @@ namespace CostsSettler.API.Controllers;
 
 [ApiController]
 [Route("/api/[Controller]")]
-public class MemberChargeController : ControllerBase
+public class ChargesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public MemberChargeController(IMediator mediator)
+    public ChargesController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAsync([FromQuery] GetChargesByParamsQuery query)
+    public async Task<IActionResult> Get([FromQuery] GetChargesByParamsQuery query)
     {
         var charges = await _mediator.Send(query);
 
@@ -38,5 +38,7 @@ public class MemberChargeController : ControllerBase
         {
             return BadRequest($"Could not settle charge of Id {command.MemberChargeId}");
         }
+
+        return Ok(isSuccess);
     }
 }
