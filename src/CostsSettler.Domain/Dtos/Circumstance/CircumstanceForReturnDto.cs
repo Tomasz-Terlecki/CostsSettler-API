@@ -7,5 +7,5 @@ public class CircumstanceForReturnDto
     public Guid Id { get; set; }
     public string Description { get; set; } = null!;
     public CircumstanceStatus CircumstanceStatus { get; set; }
-    public ICollection<MemberCharge>? Members { get; set; }
+    public ICollection<Charge>? Charges { get; set; }
 }

@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
-using CostsSettler.Domain.Dtos;
 using CostsSettler.Domain.Exceptions;
 using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using MediatR;
 
 namespace CostsSettler.Domain.Queries;
-public class GetCircumstanceByIdQuery : IRequest<CircumstanceForReturnDto>
+public class GetCircumstanceByIdQuery : IRequest<Circumstance>
 {
     public Guid Id { get; set; }
 
-    public class GetCircumstanceByIdQueryHandler : IRequestHandler<GetCircumstanceByIdQuery, CircumstanceForReturnDto>
+    public class GetCircumstanceByIdQueryHandler : IRequestHandler<GetCircumstanceByIdQuery, Circumstance>
     {
         private readonly ICircumstanceRepository _repository;
         private readonly IMapper _mapper;
@@ -23,18 +22,23 @@ public class GetCircumstanceByIdQuery : IRequest<CircumstanceForReturnDto>
             _userRepository = userRepository;
         }
 
-        public async Task<CircumstanceForReturnDto> Handle(GetCircumstanceByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Circumstance> Handle(GetCircumstanceByIdQuery request, CancellationToken cancellationToken)
         {
-            var circumstance = await _repository.GetByIdAsync(request.Id, new string[] { nameof(Circumstance.Members) });
+            var circumstance = await _repository.GetByIdAsync(request.Id, new string[] { nameof(Circumstance.Charges) });
 
             if (circumstance == null)
                 throw new ObjectNotFoundException(typeof(Circumstance), request.Id);
 
-            foreach (var member in circumstance.Members ?? new List<MemberCharge>())
-                member.User = await _userRepository.GetByIdAsync(member.UserId) 
-                    ?? throw new ObjectNotFoundException(typeof(User), member.UserId);
+            foreach (var charge in circumstance.Charges ?? new List<Charge>())
+            {
+                charge.Creditor = await _userRepository.GetByIdAsync(charge.CreditorId) 
+                    ?? throw new ObjectNotFoundException(typeof(User), charge.CreditorId);
+                
+                charge.Debtor = await _userRepository.GetByIdAsync(charge.DebtorId)
+                    ?? throw new ObjectNotFoundException(typeof(User), charge.DebtorId);
+            }
 
-            return _mapper.Map<CircumstanceForReturnDto>(circumstance);
+            return circumstance;
         }
     }
 }

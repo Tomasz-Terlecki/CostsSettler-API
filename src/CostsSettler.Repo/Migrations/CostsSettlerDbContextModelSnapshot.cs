@@ -22,6 +22,34 @@ namespace CostsSettler.Repo.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CostsSettler.Domain.Models.Charge", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<byte>("ChargeStatus")
+                        .HasColumnType("tinyint");
+
+                    b.Property<Guid>("CircumstanceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreditorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DebtorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CircumstanceId");
+
+                    b.ToTable("Charges");
+                });
+
             modelBuilder.Entity("CostsSettler.Domain.Models.Circumstance", b =>
                 {
                     b.Property<Guid>("Id")
@@ -40,41 +68,13 @@ namespace CostsSettler.Repo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Circumstances", (string)null);
+                    b.ToTable("Circumstances");
                 });
 
-            modelBuilder.Entity("CostsSettler.Domain.Models.MemberCharge", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<byte>("ChargeStatus")
-                        .HasColumnType("tinyint");
-
-                    b.Property<Guid>("CircumstanceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte>("CircumstanceRole")
-                        .HasColumnType("tinyint");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CircumstanceId");
-
-                    b.ToTable("MemberCharges", (string)null);
-                });
-
-            modelBuilder.Entity("CostsSettler.Domain.Models.MemberCharge", b =>
+            modelBuilder.Entity("CostsSettler.Domain.Models.Charge", b =>
                 {
                     b.HasOne("CostsSettler.Domain.Models.Circumstance", "Circumstance")
-                        .WithMany("Members")
+                        .WithMany("Charges")
                         .HasForeignKey("CircumstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -84,7 +84,7 @@ namespace CostsSettler.Repo.Migrations
 
             modelBuilder.Entity("CostsSettler.Domain.Models.Circumstance", b =>
                 {
-                    b.Navigation("Members");
+                    b.Navigation("Charges");
                 });
 #pragma warning restore 612, 618
         }

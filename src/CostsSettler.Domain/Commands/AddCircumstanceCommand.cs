@@ -28,38 +28,30 @@ public class AddCircumstanceCommand : IRequest<bool>
             if (request.DebtorsIds.Contains(request.CreditorId))
                 throw new ObjectReferenceException($"The creditor cannot be added as debtor");
 
-            foreach (var userId in request.DebtorsIds)
-                if (userId == Guid.Empty || !(await _userRepository.ExistsAsync(userId)))
-                    throw new ObjectReferenceException($"The use of id {userId} does not exist");
+            foreach (var debtorId in request.DebtorsIds)
+                if (debtorId == Guid.Empty || !(await _userRepository.ExistsAsync(debtorId)))
+                    throw new ObjectReferenceException($"The use of id {debtorId} does not exist");
 
             if (request.CreditorId == Guid.Empty || !(await _userRepository.ExistsAsync(request.CreditorId)))
                 throw new ObjectReferenceException($"The use of id {request.CreditorId} does not exist");
 
             var membersCount = request.DebtorsIds.Count + 1;
 
-            var debtors = request.DebtorsIds
-                .Select(member => new MemberCharge
+            var charges = request.DebtorsIds
+                .Select(debtorId => new Charge
                 {
-                    UserId = member,
-                    CircumstanceRole = CircumstanceRole.Debtor,
+                    DebtorId = debtorId,
+                    CreditorId = request.CreditorId,
                     ChargeStatus = ChargeStatus.New,
                     Amount = Round(request.TotalAmount / membersCount)
                 }).ToList();
-
-            var members = debtors.Append(new MemberCharge
-            {
-                UserId = request.CreditorId,
-                CircumstanceRole = CircumstanceRole.Creditor,
-                ChargeStatus = ChargeStatus.New,
-                Amount = Round(request.TotalAmount / membersCount)
-            }).ToList();
 
             var circumstance = new Circumstance
             {
                 Description = request.Description,
                 TotalAmount = request.TotalAmount,
                 CircumstanceStatus = CircumstanceStatus.New,
-                Members = members
+                Charges = charges
             };
             
             return await _circumstanceRepository.AddAsync(circumstance);

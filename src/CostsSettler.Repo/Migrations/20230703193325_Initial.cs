@@ -26,21 +26,21 @@ namespace CostsSettler.Repo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MemberCharges",
+                name: "Charges",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreditorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DebtorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CircumstanceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CircumstanceRole = table.Column<byte>(type: "tinyint", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     ChargeStatus = table.Column<byte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MemberCharges", x => x.Id);
+                    table.PrimaryKey("PK_Charges", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MemberCharges_Circumstances_CircumstanceId",
+                        name: "FK_Charges_Circumstances_CircumstanceId",
                         column: x => x.CircumstanceId,
                         principalTable: "Circumstances",
                         principalColumn: "Id",
@@ -48,8 +48,8 @@ namespace CostsSettler.Repo.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MemberCharges_CircumstanceId",
-                table: "MemberCharges",
+                name: "IX_Charges_CircumstanceId",
+                table: "Charges",
                 column: "CircumstanceId");
         }
 
@@ -57,7 +57,7 @@ namespace CostsSettler.Repo.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MemberCharges");
+                name: "Charges");
 
             migrationBuilder.DropTable(
                 name: "Circumstances");

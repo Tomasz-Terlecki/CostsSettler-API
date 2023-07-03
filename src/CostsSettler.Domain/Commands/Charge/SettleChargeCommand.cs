@@ -6,14 +6,14 @@ using MediatR;
 namespace CostsSettler.Domain.Commands;
 public class SettleChargeCommand : IRequest<bool>
 {
-    public Guid MemberChargeId { get; set; }
+    public Guid ChargeId { get; set; }
 
     public class SettleChargeCommandHandler : IRequestHandler<SettleChargeCommand, bool>
     {
-        private readonly IMemberChargeRepository _repository;
+        private readonly IChargeRepository _repository;
         private readonly ICircumstanceRepository _circumstanceRepository;
 
-        public SettleChargeCommandHandler(IMemberChargeRepository repository, ICircumstanceRepository circumstanceRepository)
+        public SettleChargeCommandHandler(IChargeRepository repository, ICircumstanceRepository circumstanceRepository)
         {
             _repository = repository;
             _circumstanceRepository = circumstanceRepository;
@@ -21,18 +21,19 @@ public class SettleChargeCommand : IRequest<bool>
 
         public async Task<bool> Handle(SettleChargeCommand request, CancellationToken cancellationToken)
         {
-            var charge = await _repository.GetByIdAsync(request.MemberChargeId);
+            var charge = await _repository.GetByIdAsync(request.ChargeId);
 
-            if (charge is null || charge.CircumstanceRole != CircumstanceRole.Creditor)
+            // TODO: check if logged user is creditor
+            if (charge is null)
                 return false;
 
             charge.ChargeStatus = ChargeStatus.Settled;
 
-            var circumstance = await _circumstanceRepository.GetByIdAsync(charge.CircumstanceId, new string[] { nameof(Circumstance.Members) });
+            var circumstance = await _circumstanceRepository.GetByIdAsync(charge.CircumstanceId, new string[] { nameof(Circumstance.Charges) });
 
             if (circumstance is not null &&
-                circumstance.Members is not null &&
-                circumstance.Members.All(charge => charge.ChargeStatus == ChargeStatus.Settled))
+                circumstance.Charges is not null &&
+                circumstance.Charges.All(charge => charge.ChargeStatus == ChargeStatus.Settled))
             {
                 circumstance.CircumstanceStatus = CircumstanceStatus.Settled;
                 await _circumstanceRepository.UpdateAsync(circumstance);

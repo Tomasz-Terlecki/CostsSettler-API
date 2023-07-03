@@ -5,27 +5,28 @@ using CostsSettler.Domain.Interfaces.Repositories;
 using MediatR;
 
 namespace CostsSettler.Domain.Queries;
-public class GetChargesByParamsQuery : IRequest<ICollection<MemberChargeForListDto>>
+public class GetChargesByParamsQuery : IRequest<ICollection<ChargeForListDto>>
 {
-    public Guid UserId { get; set; }
+    public Guid CreditorId { get; set; }
+    public Guid DebtorId { get; set; }
     public ChargeStatus ChargeStatus { get; set; }
 
-    public class GetChargesByParamsQueryHandler : IRequestHandler<GetChargesByParamsQuery, ICollection<MemberChargeForListDto>>
+    public class GetChargesByParamsQueryHandler : IRequestHandler<GetChargesByParamsQuery, ICollection<ChargeForListDto>>
     {
-        private readonly IMemberChargeRepository _repository;
+        private readonly IChargeRepository _repository;
         private readonly IMapper _mapper;
 
-        public GetChargesByParamsQueryHandler(IMemberChargeRepository repository, IMapper mapper)
+        public GetChargesByParamsQueryHandler(IChargeRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<ICollection<MemberChargeForListDto>> Handle(GetChargesByParamsQuery request, CancellationToken cancellationToken)
+        public async Task<ICollection<ChargeForListDto>> Handle(GetChargesByParamsQuery request, CancellationToken cancellationToken)
         {
             var charges = await _repository.GetByParamsAsync(request);
 
-            return _mapper.Map<ICollection<MemberChargeForListDto>>(charges);
+            return _mapper.Map<ICollection<ChargeForListDto>>(charges);
         }
     }
 }

@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<ICircumstanceRepository, CircumstanceRepository>();
-        services.AddScoped<IMemberChargeRepository, MemberChargeRepository>();
+        services.AddScoped<IChargeRepository, ChargeRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 
         return services;

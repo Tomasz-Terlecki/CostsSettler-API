@@ -36,7 +36,7 @@ public class ChargesController : ControllerBase
 
         if (!isSuccess)
         {
-            return BadRequest($"Could not settle charge of Id {command.MemberChargeId}");
+            return BadRequest($"Could not settle charge of Id {command.ChargeId}");
         }
 
         return Ok(isSuccess);

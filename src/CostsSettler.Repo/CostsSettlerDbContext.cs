@@ -5,7 +5,7 @@ namespace CostsSettler.Repo;
 public class CostsSettlerDbContext : DbContext
 {
     public DbSet<Circumstance> Circumstances { get; set; } = null!;
-    public DbSet<MemberCharge> MemberCharges { get; set; } = null!;
+    public DbSet<Charge> Charges { get; set; } = null!;
 
     public CostsSettlerDbContext(DbContextOptions<CostsSettlerDbContext> options) : base(options)
     {   
@@ -16,18 +16,23 @@ public class CostsSettlerDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Circumstance>()
-            .HasMany(circumstance => circumstance.Members)
-            .WithOne(member => member.Circumstance)
-            .HasForeignKey(member => member.CircumstanceId);
+            .HasMany(circumstance => circumstance.Charges)
+            .WithOne(charge => charge.Circumstance)
+            .HasForeignKey(charge => charge.CircumstanceId);
 
-        modelBuilder.Entity<MemberCharge>()
-            .Ignore(memberCharge => memberCharge.User);
+        modelBuilder.Entity<Charge>()
+            .Ignore(charge => charge.Creditor)
+            .Ignore(charge => charge.Debtor);
+
+        modelBuilder.Entity<Circumstance>()
+            .Ignore(circumstance => circumstance.Creditor)
+            .Ignore(circumstance => circumstance.Debtors);
 
         modelBuilder.Entity<Circumstance>()
             .Property(circ => circ.TotalAmount)
             .HasColumnType("decimal(10,2)");
 
-        modelBuilder.Entity<MemberCharge>()
+        modelBuilder.Entity<Charge>()
             .Property(circ => circ.Amount)
             .HasColumnType("decimal(10,2)");
     }
