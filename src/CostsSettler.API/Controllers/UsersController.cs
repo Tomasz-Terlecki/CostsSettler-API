@@ -16,9 +16,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync()
+    public async Task<IActionResult> GetByParams([FromQuery] GetUsersQuery query)
     {
-        var result = await _mediator.Send(new GetUsersQuery());
+        var result = await _mediator.Send(query);
 
         if (result is null)
             return BadRequest("Getting users failed");

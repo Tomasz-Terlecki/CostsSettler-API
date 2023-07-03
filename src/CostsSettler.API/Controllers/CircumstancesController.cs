@@ -17,7 +17,7 @@ public class CircumstancesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAsync([FromQuery] GetCircumstancesQuery query)
+    public async Task<IActionResult> Get([FromQuery] GetCircumstancesQuery query)
     {
         var circumstances = await _mediator.Send(query);
 
@@ -28,7 +28,7 @@ public class CircumstancesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         var circumstance = await _mediator.Send(new GetCircumstanceByIdQuery { Id = id });
 
@@ -39,7 +39,7 @@ public class CircumstancesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddAsync([FromBody] AddCircumstanceCommand command)
+    public async Task<IActionResult> Add([FromBody] AddCircumstanceCommand command)
     {
         var result = await _mediator.Send(command);
 
