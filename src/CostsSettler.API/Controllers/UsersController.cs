@@ -23,6 +23,6 @@ public class UsersController : ControllerBase
         if (result is null)
             return BadRequest("Getting users failed");
 
-        return new OkObjectResult(result);
+        return Ok(result);
     }
 }
