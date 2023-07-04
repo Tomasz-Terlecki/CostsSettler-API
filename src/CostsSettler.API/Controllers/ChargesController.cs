@@ -29,7 +29,20 @@ public class ChargesController : ControllerBase
         return Ok(charges);
     }
 
-    [HttpPut]
+    [HttpPut("accept")]
+    public async Task<IActionResult> AcceptCharge([FromBody] AcceptChargeCommand command)
+    {
+        var isSuccess = await _mediator.Send(command);
+
+        if (!isSuccess)
+        {
+            return BadRequest($"Could not accept charge of Id {command.ChargeId}");
+        }
+
+        return Ok(isSuccess);
+    }
+
+    [HttpPut("settle")]
     public async Task<IActionResult> SettleCharge([FromBody] SettleChargeCommand command)
     {
         var isSuccess = await _mediator.Send(command);

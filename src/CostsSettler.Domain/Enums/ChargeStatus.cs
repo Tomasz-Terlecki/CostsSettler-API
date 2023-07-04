@@ -3,5 +3,6 @@ public enum ChargeStatus : byte
 {
     None = 0,
     New = 1,
-    Settled = 2
+    Accepted = 2,
+    Settled = 3,
 }

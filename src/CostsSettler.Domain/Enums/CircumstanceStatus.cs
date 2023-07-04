@@ -1,7 +1,9 @@
 ﻿namespace CostsSettler.Domain.Enums;
 public enum CircumstanceStatus : byte
 {
-    New = 0,
-    Accepted = 1,
-    Settled = 2,
+    None = 0,
+    New = 1,
+    PartiallyAccepted = 2,
+    Accepted = 3,
+    Settled = 4,
 }
