@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CostsSettler.Domain.Dtos;
 using CostsSettler.Domain.Interfaces.Repositories;
-using CostsSettler.Domain.Models;
 using MediatR;
 
 namespace CostsSettler.Domain.Queries;
