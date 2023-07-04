@@ -5,5 +5,7 @@ public enum CircumstanceStatus : byte
     New = 1,
     PartiallyAccepted = 2,
     Accepted = 3,
-    Settled = 4,
+    PartiallySettled = 4,
+    Settled = 5,
+    Rejected = 6,
 }

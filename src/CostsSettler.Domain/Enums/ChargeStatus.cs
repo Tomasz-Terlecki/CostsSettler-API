@@ -4,5 +4,6 @@ public enum ChargeStatus : byte
     None = 0,
     New = 1,
     Accepted = 2,
-    Settled = 3,
+    Rejected = 3,
+    Settled = 4,
 }

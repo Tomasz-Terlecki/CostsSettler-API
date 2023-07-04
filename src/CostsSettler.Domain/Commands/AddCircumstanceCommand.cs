@@ -25,6 +25,8 @@ public class AddCircumstanceCommand : IRequest<bool>
 
         public async Task<bool> Handle(AddCircumstanceCommand request, CancellationToken cancellationToken)
         {
+            // TODO: check if logged user is creditor
+
             if (request.DebtorsIds.Contains(request.CreditorId))
                 throw new ObjectReferenceException($"The creditor cannot be added as debtor");
 
@@ -50,7 +52,6 @@ public class AddCircumstanceCommand : IRequest<bool>
             {
                 Description = request.Description,
                 TotalAmount = request.TotalAmount,
-                CircumstanceStatus = CircumstanceStatus.New,
                 Charges = charges
             };
             

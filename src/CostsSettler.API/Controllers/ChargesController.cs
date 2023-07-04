@@ -29,8 +29,8 @@ public class ChargesController : ControllerBase
         return Ok(charges);
     }
 
-    [HttpPut("accept")]
-    public async Task<IActionResult> AcceptCharge([FromBody] AcceptChargeCommand command)
+    [HttpPut("vote")]
+    public async Task<IActionResult> Vote([FromBody] VoteForChargeCommand command)
     {
         var isSuccess = await _mediator.Send(command);
 
@@ -43,7 +43,7 @@ public class ChargesController : ControllerBase
     }
 
     [HttpPut("settle")]
-    public async Task<IActionResult> SettleCharge([FromBody] SettleChargeCommand command)
+    public async Task<IActionResult> Settle([FromBody] SettleChargeCommand command)
     {
         var isSuccess = await _mediator.Send(command);
 

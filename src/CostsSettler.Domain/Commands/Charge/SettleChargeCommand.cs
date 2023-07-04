@@ -31,14 +31,6 @@ public class SettleChargeCommand : IRequest<bool>
 
             var circumstance = await _circumstanceRepository.GetByIdAsync(charge.CircumstanceId, new string[] { nameof(Circumstance.Charges) });
 
-            if (circumstance is not null &&
-                circumstance.Charges is not null &&
-                circumstance.Charges.All(charge => charge.ChargeStatus == ChargeStatus.Settled))
-            {
-                circumstance.CircumstanceStatus = CircumstanceStatus.Settled;
-                await _circumstanceRepository.UpdateAsync(circumstance);
-            }
-
             return await _repository.UpdateAsync(charge);
         }
     }
