@@ -1,5 +1,5 @@
 ﻿namespace CostsSettler.Domain.Exceptions;
-public abstract class DomainLogicException : Exception
+public class DomainLogicException : CostsSettlerExceptionBase
 {
     public DomainLogicException(string text) : base(text)
     {   

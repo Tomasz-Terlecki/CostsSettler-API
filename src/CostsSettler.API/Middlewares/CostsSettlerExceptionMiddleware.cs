@@ -32,7 +32,8 @@ public class CostsSettlerExceptionMiddleware
     private HttpStatusCode GetHttpStatusCode(Exception ex)
         => ex switch
         {
-            ObjectReferenceException => HttpStatusCode.BadRequest,
+            ObjectReferenceException or DomainLogicException => HttpStatusCode.BadRequest,
+            ObjectNotFoundException => HttpStatusCode.NotFound,
             _ => HttpStatusCode.InternalServerError
         };
 }
