@@ -30,7 +30,7 @@ public class CircumstancesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var circumstance = await _mediator.Send(new GetCircumstanceByIdQuery { Id = id });
+        var circumstance = await _mediator.Send(new GetCircumstanceByIdQuery(id));
 
         if (circumstance is null)
             return BadRequest($"Could not get circumstance of Id {id}");
