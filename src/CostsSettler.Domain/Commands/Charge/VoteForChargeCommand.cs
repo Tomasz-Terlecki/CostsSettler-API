@@ -13,12 +13,10 @@ public class VoteForChargeCommand : IRequest<bool>
     public class VoteForChargeCommandHandler : IRequestHandler<VoteForChargeCommand, bool>
     {
         private readonly IChargeRepository _repository;
-        private readonly ICircumstanceRepository _circumstanceRepository;
-
-        public VoteForChargeCommandHandler(IChargeRepository repository, ICircumstanceRepository circumstanceRepository)
+        
+        public VoteForChargeCommandHandler(IChargeRepository repository)
         {
             _repository = repository;
-            _circumstanceRepository = circumstanceRepository;
         }
 
         public async Task<bool> Handle(VoteForChargeCommand request, CancellationToken cancellationToken)
@@ -35,8 +33,6 @@ public class VoteForChargeCommand : IRequest<bool>
                 ChargeVote.Accept => ChargeStatus.Accepted,
                 _ => throw new ObjectReferenceException($"Could not vote for charge, because charge vote was {request.ChargeVote}")
             };
-
-            var circumstance = await _circumstanceRepository.GetByIdAsync(charge.CircumstanceId, new string[] { nameof(Circumstance.Charges) });
 
             return await _repository.UpdateAsync(charge);
         }

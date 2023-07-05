@@ -11,12 +11,10 @@ public class SettleChargeCommand : IRequest<bool>
     public class SettleChargeCommandHandler : IRequestHandler<SettleChargeCommand, bool>
     {
         private readonly IChargeRepository _repository;
-        private readonly ICircumstanceRepository _circumstanceRepository;
-
-        public SettleChargeCommandHandler(IChargeRepository repository, ICircumstanceRepository circumstanceRepository)
+        
+        public SettleChargeCommandHandler(IChargeRepository repository)
         {
             _repository = repository;
-            _circumstanceRepository = circumstanceRepository;
         }
 
         public async Task<bool> Handle(SettleChargeCommand request, CancellationToken cancellationToken)
@@ -28,8 +26,6 @@ public class SettleChargeCommand : IRequest<bool>
                 return false;
 
             charge.ChargeStatus = ChargeStatus.Settled;
-
-            var circumstance = await _circumstanceRepository.GetByIdAsync(charge.CircumstanceId, new string[] { nameof(Circumstance.Charges) });
 
             return await _repository.UpdateAsync(charge);
         }
