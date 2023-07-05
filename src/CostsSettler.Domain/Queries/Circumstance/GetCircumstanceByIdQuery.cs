@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CostsSettler.Domain.Exceptions;
+﻿using CostsSettler.Domain.Exceptions;
 using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using MediatR;
@@ -9,16 +8,19 @@ public class GetCircumstanceByIdQuery : IRequest<Circumstance>
 {
     public Guid Id { get; set; }
 
+    public GetCircumstanceByIdQuery(Guid id)
+    {
+        Id = id;
+    }
+
     public class GetCircumstanceByIdQueryHandler : IRequestHandler<GetCircumstanceByIdQuery, Circumstance>
     {
         private readonly ICircumstanceRepository _repository;
-        private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
 
-        public GetCircumstanceByIdQueryHandler(ICircumstanceRepository repository, IMapper mapper, IUserRepository userRepository)
+        public GetCircumstanceByIdQueryHandler(ICircumstanceRepository repository, IUserRepository userRepository)
         {
             _repository = repository;
-            _mapper = mapper;
             _userRepository = userRepository;
         }
 
