@@ -27,11 +27,11 @@ public class Circumstance : ModelBase
             if (Charges.Any(charge => charge.ChargeStatus == ChargeStatus.Rejected))
                 return CircumstanceStatus.Rejected;
 
-            if (Charges.Any(charge => charge.ChargeStatus == ChargeStatus.Accepted))
-                return CircumstanceStatus.PartiallyAccepted;
-
             if (Charges.Any(charge => charge.ChargeStatus == ChargeStatus.Settled))
                 return CircumstanceStatus.PartiallySettled;
+
+            if (Charges.Any(charge => charge.ChargeStatus == ChargeStatus.Accepted))
+                return CircumstanceStatus.PartiallyAccepted;
 
             return CircumstanceStatus.None;
         }
