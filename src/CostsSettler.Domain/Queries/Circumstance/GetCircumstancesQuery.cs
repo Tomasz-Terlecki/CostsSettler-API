@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CostsSettler.Domain.Dtos;
 using CostsSettler.Domain.Interfaces.Repositories;
+using CostsSettler.Domain.Models;
 using MediatR;
 
 namespace CostsSettler.Domain.Queries;
@@ -19,7 +20,7 @@ public class GetCircumstancesQuery : IRequest<ICollection<CircumstanceForListDto
 
         public async Task<ICollection<CircumstanceForListDto>> Handle(GetCircumstancesQuery request, CancellationToken cancellationToken)
         {
-            var circumstances = await _repository.GetAllAsync();
+            var circumstances = await _repository.GetAllAsync(new string[] { nameof(Circumstance.Charges) });
 
             return _mapper.Map<ICollection<CircumstanceForListDto>>(circumstances);
         }
