@@ -32,10 +32,10 @@ public class AddCircumstanceCommand : IRequest<bool>
 
             foreach (var debtorId in request.DebtorsIds)
                 if (debtorId == Guid.Empty || !(await _userRepository.ExistsAsync(debtorId)))
-                    throw new ObjectReferenceException($"The use of id {debtorId} does not exist");
+                    throw new ObjectNotFoundException(typeof(User), debtorId);
 
             if (request.CreditorId == Guid.Empty || !(await _userRepository.ExistsAsync(request.CreditorId)))
-                throw new ObjectReferenceException($"The use of id {request.CreditorId} does not exist");
+                throw new ObjectNotFoundException(typeof(User), request.CreditorId);
 
             var membersCount = request.DebtorsIds.Count + 1;
 
