@@ -34,6 +34,7 @@ public class CostsSettlerExceptionMiddleware
         {
             ObjectReferenceException or DomainLogicException => HttpStatusCode.BadRequest,
             ObjectNotFoundException => HttpStatusCode.NotFound,
+            AuthorizationException => HttpStatusCode.Unauthorized,
             _ => HttpStatusCode.InternalServerError
         };
 }
