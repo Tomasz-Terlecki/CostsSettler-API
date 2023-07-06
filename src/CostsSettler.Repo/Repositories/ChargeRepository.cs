@@ -15,11 +15,10 @@ public class ChargeRepository : RepositoryBase<Charge>, IChargeRepository
     {
         var query = _dbContext.Charges.AsQueryable();
 
-        if (parameters.DebtorId != Guid.Empty)
-            query = query.Where(charge => charge.DebtorId == parameters.DebtorId);
-
-        if (parameters.CreditorId != Guid.Empty)
-            query = query.Where(charge => charge.CreditorId == parameters.CreditorId);
+        if (parameters.UserId != Guid.Empty)
+            query = query.Where(
+                charge => charge.DebtorId == parameters.UserId ||
+                charge.CreditorId == parameters.UserId);
 
         if (parameters.ChargeStatus != ChargeStatus.None)
             query = query.Where(charge => charge.ChargeStatus == parameters.ChargeStatus);
