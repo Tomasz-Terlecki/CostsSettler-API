@@ -4,4 +4,5 @@ public interface IIdentityService
     bool IsAuthenticated { get; }
     Guid UserId { get; }
     void CheckEqualityWithLoggedUserId(Guid userId);
+    void CheckIfLoggedUserIsOneOf(IEnumerable<Guid> ids);
 }
