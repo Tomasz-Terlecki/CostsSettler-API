@@ -1,6 +1,7 @@
 ﻿using CostsSettler.Auth.Clients;
 using CostsSettler.Auth.Config;
 using CostsSettler.Domain.Interfaces.Repositories;
+using CostsSettler.Domain.Services;
 using CostsSettler.Repo.Repositories;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Common;
@@ -15,6 +16,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICircumstanceRepository, CircumstanceRepository>();
         services.AddScoped<IChargeRepository, ChargeRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IIdentityService, IdentityService>();
 
         return services;
     }
@@ -59,6 +61,8 @@ public static class ServiceCollectionExtensions
                 ValidateIssuerSigningKey = false,
                 ValidateLifetime = false,
                 ValidateIssuer = false,
+                ValidateAudience = false, // TODO: remove after creating valid FE client in Keycloak
+                RoleClaimType = "appRole"
             };
         });
 

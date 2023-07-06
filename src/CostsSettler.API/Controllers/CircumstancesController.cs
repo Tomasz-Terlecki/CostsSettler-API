@@ -1,12 +1,14 @@
 using CostsSettler.Domain.Commands;
 using CostsSettler.Domain.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CostsSettler.API.Controllers;
 
 [ApiController]
 [Route("/api/[Controller]")]
+[Authorize]
 public class CircumstancesController : ControllerBase
 {
     private readonly IMediator _mediator;

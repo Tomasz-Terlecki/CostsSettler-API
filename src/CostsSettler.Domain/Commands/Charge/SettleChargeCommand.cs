@@ -3,6 +3,7 @@ using CostsSettler.Domain.Exceptions;
 using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Queries;
+using CostsSettler.Domain.Services;
 using MediatR;
 
 namespace CostsSettler.Domain.Commands;
@@ -14,11 +15,13 @@ public class SettleChargeCommand : IRequest<bool>
     {
         private readonly IMediator _mediator;
         private readonly IChargeRepository _repository;
-        
-        public SettleChargeCommandHandler(IMediator mediator, IChargeRepository repository)
+        private readonly IIdentityService _identityService;
+
+        public SettleChargeCommandHandler(IMediator mediator, IChargeRepository repository, IIdentityService identityService)
         {
             _mediator = mediator;
             _repository = repository;
+            _identityService = identityService;
         }
 
         public async Task<bool> Handle(SettleChargeCommand request, CancellationToken cancellationToken)
@@ -26,7 +29,7 @@ public class SettleChargeCommand : IRequest<bool>
             Charge charge = await _mediator.Send(new GetChargeByIdQuery(request.ChargeId));
             Circumstance circumstance = await _mediator.Send(new GetCircumstanceByIdQuery(charge.CircumstanceId));
 
-            // TODO: check if logged user is creditor
+            _identityService.CheckEqualityWithLoggedUserId(charge.CreditorId);
 
             if (charge.ChargeStatus != ChargeStatus.Accepted ||
                     (circumstance.CircumstanceStatus != CircumstanceStatus.Accepted && 

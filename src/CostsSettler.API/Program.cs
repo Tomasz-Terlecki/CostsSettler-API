@@ -3,6 +3,8 @@ using CostsSettler.API.Middlewares;
 using CostsSettler.Domain.Profiles;
 using CostsSettler.Domain.Queries;
 using CostsSettler.Repo;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
@@ -11,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 var env = builder.Environment;
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers()
@@ -24,7 +27,12 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetCircumstancesQuery).Assembly));
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(AutoMapperProfiles)));
+
 builder.Services.AddJwtTokenAuthentication(config, env);
+builder.Services.AddAuthorization(options =>
+    options.FallbackPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build());
 
 builder.Services.AddDbContext<CostsSettlerDbContext>(
     options => options.UseSqlServer(config.GetConnectionString("DefaultConnection"),
@@ -57,6 +65,7 @@ app.UseMiddleware<CostsSettlerExceptionMiddleware>();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

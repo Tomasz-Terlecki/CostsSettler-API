@@ -2,6 +2,7 @@
 using CostsSettler.Domain.Exceptions;
 using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
+using CostsSettler.Domain.Services;
 using MediatR;
 
 namespace CostsSettler.Domain.Commands;
@@ -16,16 +17,19 @@ public class AddCircumstanceCommand : IRequest<bool>
     {
         private readonly ICircumstanceRepository _circumstanceRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IIdentityService _identityService;
 
-        public AddCircumstanceCommandHandler(ICircumstanceRepository circumstanceRepository, IUserRepository userRepository)
+        public AddCircumstanceCommandHandler(ICircumstanceRepository circumstanceRepository, 
+            IUserRepository userRepository, IIdentityService identityService)
         {
             _circumstanceRepository = circumstanceRepository;
             _userRepository = userRepository;
+            _identityService = identityService;
         }
 
         public async Task<bool> Handle(AddCircumstanceCommand request, CancellationToken cancellationToken)
         {
-            // TODO: check if logged user is creditor
+            _identityService.CheckEqualityWithLoggedUserId(request.CreditorId);
 
             if (request.DebtorsIds.Contains(request.CreditorId))
                 throw new ObjectReferenceException($"The creditor cannot be added as debtor");
