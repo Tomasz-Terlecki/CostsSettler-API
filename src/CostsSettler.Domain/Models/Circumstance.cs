@@ -46,4 +46,8 @@ public class Circumstance : ModelBase
         get => Charges?.FirstOrDefault()?.Creditor
             ?? throw new ObjectReferenceException("Failed to get creditor from database");
     }
+    public ICollection<User> Members
+    {
+        get => (ICollection<User>)Debtors.Append(Creditor);
+    }
 }
