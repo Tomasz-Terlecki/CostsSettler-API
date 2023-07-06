@@ -19,7 +19,7 @@ public class CircumstancesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] GetCircumstancesQuery query)
+    public async Task<IActionResult> Get([FromQuery] GetCircumstancesByParamsQuery query)
     {
         var circumstances = await _mediator.Send(query);
 

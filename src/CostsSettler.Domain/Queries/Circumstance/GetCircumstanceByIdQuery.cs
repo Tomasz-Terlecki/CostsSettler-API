@@ -1,6 +1,7 @@
 ﻿using CostsSettler.Domain.Exceptions;
 using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
+using CostsSettler.Domain.Services;
 using MediatR;
 
 namespace CostsSettler.Domain.Queries;
@@ -17,11 +18,14 @@ public class GetCircumstanceByIdQuery : IRequest<Circumstance>
     {
         private readonly ICircumstanceRepository _repository;
         private readonly IUserRepository _userRepository;
+        private readonly IIdentityService _identityService;
 
-        public GetCircumstanceByIdQueryHandler(ICircumstanceRepository repository, IUserRepository userRepository)
+        public GetCircumstanceByIdQueryHandler(ICircumstanceRepository repository, 
+            IUserRepository userRepository, IIdentityService identityService)
         {
             _repository = repository;
             _userRepository = userRepository;
+            _identityService = identityService;
         }
 
         public async Task<Circumstance> Handle(GetCircumstanceByIdQuery request, CancellationToken cancellationToken)
@@ -30,6 +34,8 @@ public class GetCircumstanceByIdQuery : IRequest<Circumstance>
 
             if (circumstance == null)
                 throw new ObjectNotFoundException(typeof(Circumstance), request.Id);
+
+            _identityService.CheckIfLoggedUserIsOneOf(circumstance.Members.Select(member => member.Id));
 
             foreach (var charge in circumstance.Charges ?? new List<Charge>())
             {
