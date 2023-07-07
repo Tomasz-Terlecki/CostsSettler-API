@@ -8,7 +8,7 @@ This is the CostsSettler application API.
 2. Clone the repository.
 3. Make sure you have Docker engine installed.
 4. Run command `docker-compose up -d --build` in `src` directory.
-5. All containers should be started automatically.
-6. Keycloak configuration should import automatically.
-7. `CostsSettler-API` database should migrate automatically on `costs-settler-api` container startup.
-8. Your `CostsSettler-API` instance should be working.
+   * All containers should be started automatically.
+   * Keycloak configuration should import automatically.
+   * `CostsSettler-API` database should migrate automatically on `costs-settler-api` container startup.
+   * **Your `CostsSettler-API` instance should be working properly.**
