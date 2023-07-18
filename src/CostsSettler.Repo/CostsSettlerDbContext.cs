@@ -26,7 +26,8 @@ public class CostsSettlerDbContext : DbContext
 
         modelBuilder.Entity<Circumstance>()
             .Ignore(circumstance => circumstance.Creditor)
-            .Ignore(circumstance => circumstance.Debtors);
+            .Ignore(circumstance => circumstance.Debtors)
+            .Ignore(circumstance => circumstance.Members);
 
         modelBuilder.Entity<Circumstance>()
             .Property(circ => circ.TotalAmount)
