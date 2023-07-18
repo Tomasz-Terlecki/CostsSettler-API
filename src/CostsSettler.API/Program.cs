@@ -25,7 +25,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetCircumstanceByIdQuery).Assembly));
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(AutoMapperProfiles)));
 
 builder.Services.AddJwtTokenAuthentication(config, env);
