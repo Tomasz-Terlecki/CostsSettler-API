@@ -17,6 +17,9 @@ public class AutoMapperProfiles : Profile
         CreateMap<Charge, ChargeForListDto>()
             .ForMember(
                 dst => dst.CircumstanceDescription, 
-                opt => opt.MapFrom(src => src.Circumstance.Description));
+                opt => opt.MapFrom(src => src.Circumstance.Description))
+            .ForMember(
+                dst => dst.CircumstanceStatus,
+                opt => opt.MapFrom(src => src.Circumstance.CircumstanceStatus));
     }
 }
