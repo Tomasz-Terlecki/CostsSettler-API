@@ -5,7 +5,9 @@ public class ChargeForListDto
 {
     public Guid Id { get; set; }
     public Guid CreditorId { get; set; }
+    public UserForListDto Creditor { get; set; } = null!;
     public Guid DebtorId { get; set; }
+    public UserForListDto Debtor { get; set; } = null!;
     public Guid CircumstanceId { get; set; }
     public string CircumstanceDescription { get; set; } = null!;
     public decimal Amount { get; set; }
