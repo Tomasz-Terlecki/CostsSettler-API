@@ -17,7 +17,8 @@ public class CircumstanceRepository : RepositoryBase<Circumstance>, ICircumstanc
 
         if (parameters.UserId != Guid.Empty)
             query = query.Where(circumstance =>
-                circumstance.Members.Any(member => member.Id == parameters.UserId));
+                circumstance.Charges != null && circumstance.Charges.Any(charge => 
+                    charge.DebtorId == parameters.UserId || charge.CreditorId == parameters.UserId));
 
         return await query.Include(circumstance => circumstance.Charges).ToListAsync();
     }
