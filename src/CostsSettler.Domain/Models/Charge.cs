@@ -11,4 +11,5 @@ public class Charge : ModelBase
     public Guid CircumstanceId { get; set; }
     public decimal Amount { get; set; }
     public ChargeStatus ChargeStatus { get; set; }
+    public DateTime DateTime { get => Circumstance.DateTime; }
 }

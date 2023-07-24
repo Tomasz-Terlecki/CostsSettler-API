@@ -7,6 +7,7 @@ public class Circumstance : ModelBase
     public string Description { get; set; } = null!;
     public decimal TotalAmount { get; set; }
     public ICollection<Charge>? Charges { get; set; }
+    public DateTime DateTime { get; set; }
 
     public CircumstanceStatus CircumstanceStatus 
     { 

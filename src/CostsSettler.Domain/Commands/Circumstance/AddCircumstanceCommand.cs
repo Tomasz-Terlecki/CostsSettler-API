@@ -12,6 +12,7 @@ public class AddCircumstanceCommand : IRequest<bool>
     public decimal TotalAmount { get; set; }
     public ICollection<Guid> DebtorsIds { get; set; } = null!;
     public Guid CreditorId { get; set; }
+    public DateTime DateTime { get; set; }
 
     public class AddCircumstanceCommandHandler : IRequestHandler<AddCircumstanceCommand, bool>
     {
@@ -56,6 +57,7 @@ public class AddCircumstanceCommand : IRequest<bool>
             {
                 Description = request.Description,
                 TotalAmount = request.TotalAmount,
+                DateTime = request.DateTime,
                 Charges = charges
             };
             

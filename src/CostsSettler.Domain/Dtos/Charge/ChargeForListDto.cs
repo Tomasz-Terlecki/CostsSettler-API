@@ -12,4 +12,5 @@ public class ChargeForListDto
     public string CircumstanceDescription { get; set; } = null!;
     public decimal Amount { get; set; }
     public ChargeStatus ChargeStatus { get; set; }
+    public DateTime DateTime { get; set; }
 }

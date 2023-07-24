@@ -22,7 +22,8 @@ public class CostsSettlerDbContext : DbContext
 
         modelBuilder.Entity<Charge>()
             .Ignore(charge => charge.Creditor)
-            .Ignore(charge => charge.Debtor);
+            .Ignore(charge => charge.Debtor)
+            .Ignore(charge => charge.DateTime);
 
         modelBuilder.Entity<Circumstance>()
             .Ignore(circumstance => circumstance.Creditor)
