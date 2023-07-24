@@ -1,4 +1,5 @@
 ﻿using CostsSettler.Domain.Enums;
+using CostsSettler.Domain.Exceptions;
 using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Queries;
@@ -7,8 +8,11 @@ using Microsoft.EntityFrameworkCore;
 namespace CostsSettler.Repo.Repositories;
 public class ChargeRepository : RepositoryBase<Charge>, IChargeRepository
 {
-    public ChargeRepository(CostsSettlerDbContext dbContext) : base(dbContext)
+    private readonly IUserRepository _userRepository;
+
+    public ChargeRepository(CostsSettlerDbContext dbContext, IUserRepository userRepository) : base(dbContext)
     {
+        _userRepository = userRepository;
     }
 
     public async Task<ICollection<Charge>> GetByParamsAsync(GetChargesByParamsQuery parameters)
@@ -23,6 +27,16 @@ public class ChargeRepository : RepositoryBase<Charge>, IChargeRepository
         if (parameters.ChargeStatus != ChargeStatus.None)
             query = query.Where(charge => charge.ChargeStatus == parameters.ChargeStatus);
 
-        return await query.Include(charge => charge.Circumstance).ToListAsync();
+        var charges = await query.Include(charge => charge.Circumstance).ToListAsync();
+
+        foreach (var charge in charges)
+        {
+            charge.Creditor = await _userRepository.GetByIdAsync(charge.CreditorId) 
+                ?? throw new ObjectNotFoundException(charge.Creditor.GetType(), charge.CreditorId);
+            charge.Debtor = await _userRepository.GetByIdAsync(charge.DebtorId)
+                ?? throw new ObjectNotFoundException(charge.Debtor.GetType(), charge.DebtorId);
+        }
+
+        return charges;
     }
 }
