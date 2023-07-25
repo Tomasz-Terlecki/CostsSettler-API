@@ -35,8 +35,6 @@ public class GetCircumstanceByIdQuery : IRequest<Circumstance>
             if (circumstance == null)
                 throw new ObjectNotFoundException(typeof(Circumstance), request.Id);
 
-            _identityService.CheckIfLoggedUserIsOneOf(circumstance.Members.Select(member => member.Id));
-
             foreach (var charge in circumstance.Charges ?? new List<Charge>())
             {
                 charge.Creditor = await _userRepository.GetByIdAsync(charge.CreditorId) 
@@ -45,6 +43,8 @@ public class GetCircumstanceByIdQuery : IRequest<Circumstance>
                 charge.Debtor = await _userRepository.GetByIdAsync(charge.DebtorId)
                     ?? throw new ObjectNotFoundException(typeof(User), charge.DebtorId);
             }
+
+            _identityService.CheckIfLoggedUserIsOneOf(circumstance.Members.Select(member => member.Id));
 
             return circumstance;
         }
