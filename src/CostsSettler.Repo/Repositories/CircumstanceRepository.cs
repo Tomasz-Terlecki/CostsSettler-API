@@ -1,4 +1,3 @@
-using CostsSettler.Domain.Enums;
 using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Queries;
@@ -21,5 +20,19 @@ public class CircumstanceRepository : RepositoryBase<Circumstance>, ICircumstanc
                     charge.DebtorId == parameters.UserId || charge.CreditorId == parameters.UserId));
 
         return await query.Include(circumstance => circumstance.Charges).ToListAsync();
+    }
+
+    public override Task<bool> AddAsync(Circumstance circumstance)
+    {
+        circumstance.FixCircumstanceStatus();
+        
+        return base.AddAsync(circumstance);
+    }
+    
+    public override Task<bool> UpdateAsync(Circumstance circumstance)
+    {
+        circumstance.FixCircumstanceStatus();
+        
+        return base.UpdateAsync(circumstance);
     }
 }
