@@ -42,13 +42,13 @@ public class Circumstance : ModelBase
         get => Charges?.Select(charge => charge.Debtor).ToList()
             ?? throw new ObjectReferenceException("Failed to get debtors from database");
     }
-    public User? Creditor
+    public User Creditor
     { 
         get => Charges?.FirstOrDefault()?.Creditor
             ?? throw new ObjectReferenceException("Failed to get creditor from database");
     }
     public ICollection<User> Members
     {
-        get => (ICollection<User>)Debtors.Append(Creditor);
+        get => Debtors.Append(Creditor).ToList();
     }
 }
