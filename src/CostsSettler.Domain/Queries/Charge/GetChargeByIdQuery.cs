@@ -33,8 +33,7 @@ public class GetChargeByIdQuery : IRequest<Charge>
             Charge charge = await _repository.GetByIdAsync(request.Id, new string[] { nameof(Charge.Circumstance) })
                 ?? throw new ObjectNotFoundException(typeof(Charge), request.Id);
 
-            _identityService.CheckEqualityWithLoggedUserId(charge.CreditorId);
-            _identityService.CheckEqualityWithLoggedUserId(charge.DebtorId);
+            _identityService.CheckIfLoggedUserIsOneOf(new List<Guid> { charge.CreditorId, charge.DebtorId });
 
             charge.Creditor = await _userRepository.GetByIdAsync(charge.CreditorId)
                 ?? throw new ObjectNotFoundException(typeof(User), charge.CreditorId);
