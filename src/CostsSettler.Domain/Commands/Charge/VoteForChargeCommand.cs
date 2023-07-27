@@ -17,12 +17,15 @@ public class VoteForChargeCommand : IRequest<bool>
         private readonly IMediator _mediator;
         private readonly IChargeRepository _repository;
         private readonly IIdentityService _identityService;
+        private readonly ICircumstanceRepository _circumstanceRepository;
 
-        public VoteForChargeCommandHandler(IMediator mediator, IChargeRepository repository, IIdentityService identityService)
+        public VoteForChargeCommandHandler(IMediator mediator, IChargeRepository repository, IIdentityService identityService,
+            ICircumstanceRepository circumstanceRepository)
         {
             _mediator = mediator;
             _repository = repository;
             _identityService = identityService;
+            _circumstanceRepository = circumstanceRepository;
         }
 
         public async Task<bool> Handle(VoteForChargeCommand request, CancellationToken cancellationToken)
@@ -59,7 +62,7 @@ public class VoteForChargeCommand : IRequest<bool>
                     throw new ObjectReferenceException($"Could not vote for charge, because charge vote was {request.ChargeVote}");
             }
 
-            return await _repository.UpdateAsync(charge);
+            return await _repository.UpdateAsync(charge) && await _circumstanceRepository.UpdateAsync(circumstance);
         }
     }
 }

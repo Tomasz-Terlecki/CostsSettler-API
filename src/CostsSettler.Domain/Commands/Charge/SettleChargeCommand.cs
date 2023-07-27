@@ -16,12 +16,15 @@ public class SettleChargeCommand : IRequest<bool>
         private readonly IMediator _mediator;
         private readonly IChargeRepository _repository;
         private readonly IIdentityService _identityService;
+        private readonly ICircumstanceRepository _circumstanceRepository;
 
-        public SettleChargeCommandHandler(IMediator mediator, IChargeRepository repository, IIdentityService identityService)
+        public SettleChargeCommandHandler(IMediator mediator, IChargeRepository repository, IIdentityService identityService,
+            ICircumstanceRepository circumstanceRepository)
         {
             _mediator = mediator;
             _repository = repository;
             _identityService = identityService;
+            _circumstanceRepository = circumstanceRepository;
         }
 
         public async Task<bool> Handle(SettleChargeCommand request, CancellationToken cancellationToken)
@@ -39,7 +42,7 @@ public class SettleChargeCommand : IRequest<bool>
             
             charge.ChargeStatus = ChargeStatus.Settled;
 
-            return await _repository.UpdateAsync(charge);
+            return await _repository.UpdateAsync(charge) && await _circumstanceRepository.UpdateAsync(circumstance);
         }
     }
 }
