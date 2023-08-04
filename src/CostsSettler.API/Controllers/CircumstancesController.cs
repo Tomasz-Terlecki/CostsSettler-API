@@ -41,7 +41,7 @@ public class CircumstancesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] AddCircumstanceCommand command)
+    public async Task<IActionResult> Add(AddCircumstanceCommand command)
     {
         var result = await _mediator.Send(command);
 

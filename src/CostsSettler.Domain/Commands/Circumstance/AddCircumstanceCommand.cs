@@ -12,7 +12,8 @@ public class AddCircumstanceCommand : IRequest<bool>
     public decimal TotalAmount { get; set; }
     public ICollection<Guid> DebtorsIds { get; set; } = null!;
     public Guid CreditorId { get; set; }
-    public DateTime DateTime { get; set; }
+    public string Date { get; set; } = null!;
+    public string Time { get; set; } = null!;
 
     public class AddCircumstanceCommandHandler : IRequestHandler<AddCircumstanceCommand, bool>
     {
@@ -53,11 +54,20 @@ public class AddCircumstanceCommand : IRequest<bool>
                     Amount = Round(request.TotalAmount / membersCount)
                 }).ToList();
 
+            var dateOnlySplit = request.Date.Split('-');
+            var timeOnlySplit = request.Time.Split(':');
+
             var circumstance = new Circumstance
             {
                 Description = request.Description,
                 TotalAmount = request.TotalAmount,
-                DateTime = request.DateTime,
+                DateTime = new DateOnly(
+                        int.Parse(dateOnlySplit[0]), 
+                        int.Parse(dateOnlySplit[1]), 
+                        int.Parse(dateOnlySplit[2]))
+                            .ToDateTime(new TimeOnly(
+                                int.Parse(timeOnlySplit[0]),
+                                int.Parse(timeOnlySplit[1]))),
                 Charges = charges
             };
             
