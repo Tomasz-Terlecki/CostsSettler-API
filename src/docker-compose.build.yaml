@@ -1,0 +1,8 @@
+# docker compose -f docker-compose.build.yaml build
+
+services:
+  costs-settler-api:
+    image: costsettler.api:latest
+    build:
+        context: .
+        dockerfile: ./CostsSettler.API/Dockerfile
