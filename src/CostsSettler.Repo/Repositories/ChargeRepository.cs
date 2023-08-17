@@ -30,12 +30,15 @@ public class ChargeRepository : RepositoryBase<Charge>, IChargeRepository
 
         var dateFrom = parameters.DateFrom?.ToDateOnly()?.ToDateTime(TimeOnly.MinValue).Date;
         var dateTo = parameters.DateTo?.ToDateOnly()?.ToDateTime(TimeOnly.MinValue).Date;
-        
+
         if (dateFrom is not null && dateTo is not null)
-        {
             query = query.Where(charge => dateFrom <= charge.Circumstance.DateTime.Date &&
                                 charge.Circumstance.DateTime.Date <= dateTo);
-        }
+
+        if (!string.IsNullOrWhiteSpace(parameters.CircumstanceDescription))
+            query = query.Where(charge => 
+                charge.Circumstance.Description
+                    .Contains(parameters.CircumstanceDescription));
 
         var charges = await query.Include(charge => charge.Circumstance).ToListAsync();
 

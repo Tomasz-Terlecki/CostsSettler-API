@@ -12,6 +12,7 @@ public class GetChargesByParamsQuery : IRequest<ICollection<ChargeForListDto>>
     public ChargeStatus ChargeStatus { get; set; }
     public string? DateFrom { get; set; }
     public string? DateTo { get; set; }
+    public string? CircumstanceDescription { get; set; }
 
     public class GetChargesByParamsQueryHandler : IRequestHandler<GetChargesByParamsQuery, ICollection<ChargeForListDto>>
     {
