@@ -54,14 +54,15 @@ public class AddCircumstanceCommand : IRequest<bool>
                     ChargeStatus = ChargeStatus.New,
                     Amount = Round(request.TotalAmount / membersCount)
                 }).ToList();
+            
+            var date = request.Date.ToDateOnly() ?? throw new ArgumentException(nameof(request.Date));
+            var time = request.Time.ToTimeOnly() ?? throw new ArgumentException(nameof(request.Time));
 
             var circumstance = new Circumstance
             {
                 Description = request.Description,
                 TotalAmount = request.TotalAmount,
-                DateTime = request.Date
-                            .ToDateOnly()
-                            .ToDateTime(request.Time.ToTimeOnly()),
+                DateTime = date.ToDateTime(time),
                 Charges = charges
             };
             
