@@ -4,6 +4,7 @@ using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Queries;
 using Microsoft.EntityFrameworkCore;
+using CostsSettler.Domain.Extensions;
 
 namespace CostsSettler.Repo.Repositories;
 public class ChargeRepository : RepositoryBase<Charge>, IChargeRepository
@@ -26,6 +27,15 @@ public class ChargeRepository : RepositoryBase<Charge>, IChargeRepository
 
         if (parameters.ChargeStatus != ChargeStatus.None)
             query = query.Where(charge => charge.ChargeStatus == parameters.ChargeStatus);
+
+        var dateFrom = parameters.DateFrom?.ToDateOnly()?.ToDateTime(TimeOnly.MinValue).Date;
+        var dateTo = parameters.DateTo?.ToDateOnly()?.ToDateTime(TimeOnly.MinValue).Date;
+        
+        if (dateFrom is not null && dateTo is not null)
+        {
+            query = query.Where(charge => dateFrom <= charge.Circumstance.DateTime.Date &&
+                                charge.Circumstance.DateTime.Date <= dateTo);
+        }
 
         var charges = await query.Include(charge => charge.Circumstance).ToListAsync();
 

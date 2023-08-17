@@ -11,8 +11,6 @@ public static class StringExtensions
     {
         try
         {
-            ArgumentNullException.ThrowIfNull(value);
-
             var dateOnlySplit = value.Split('-');
             if (dateOnlySplit.Length != 3)
                 return null;
@@ -38,7 +36,6 @@ public static class StringExtensions
     {
         try
         {
-            ArgumentNullException.ThrowIfNull(value);
             var timeOnlySplit = value.Split(':');
             if (timeOnlySplit.Length != 2)
                 return null;
