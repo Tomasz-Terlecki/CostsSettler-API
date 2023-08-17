@@ -1,5 +1,6 @@
 ﻿using CostsSettler.Domain.Enums;
 using CostsSettler.Domain.Exceptions;
+using CostsSettler.Domain.Extensions;
 using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Services;
@@ -54,20 +55,13 @@ public class AddCircumstanceCommand : IRequest<bool>
                     Amount = Round(request.TotalAmount / membersCount)
                 }).ToList();
 
-            var dateOnlySplit = request.Date.Split('-');
-            var timeOnlySplit = request.Time.Split(':');
-
             var circumstance = new Circumstance
             {
                 Description = request.Description,
                 TotalAmount = request.TotalAmount,
-                DateTime = new DateOnly(
-                        int.Parse(dateOnlySplit[0]), 
-                        int.Parse(dateOnlySplit[1]), 
-                        int.Parse(dateOnlySplit[2]))
-                            .ToDateTime(new TimeOnly(
-                                int.Parse(timeOnlySplit[0]),
-                                int.Parse(timeOnlySplit[1]))),
+                DateTime = request.Date
+                            .ToDateOnly()
+                            .ToDateTime(request.Time.ToTimeOnly()),
                 Charges = charges
             };
             
