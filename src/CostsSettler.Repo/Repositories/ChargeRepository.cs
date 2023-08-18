@@ -25,9 +25,6 @@ public class ChargeRepository : RepositoryBase<Charge>, IChargeRepository
                 charge => charge.DebtorId == parameters.UserId ||
                 charge.CreditorId == parameters.UserId);
 
-        if (parameters.ChargeStatus != ChargeStatus.None)
-            query = query.Where(charge => charge.ChargeStatus == parameters.ChargeStatus);
-
         var dateFrom = parameters.DateFrom?.ToDateOnly()?.ToDateTime(TimeOnly.MinValue).Date;
         var dateTo = parameters.DateTo?.ToDateOnly()?.ToDateTime(TimeOnly.MinValue).Date;
 
@@ -39,6 +36,12 @@ public class ChargeRepository : RepositoryBase<Charge>, IChargeRepository
             query = query.Where(charge => 
                 charge.Circumstance.Description
                     .Contains(parameters.CircumstanceDescription));
+
+        if (parameters.AmountFrom is not null)
+            query = query.Where(charge => charge.Amount >= parameters.AmountFrom);
+
+        if (parameters.AmountTo is not null)
+            query = query.Where(charge => charge.Amount <= parameters.AmountTo);
 
         var charges = await query.Include(charge => charge.Circumstance).ToListAsync();
 

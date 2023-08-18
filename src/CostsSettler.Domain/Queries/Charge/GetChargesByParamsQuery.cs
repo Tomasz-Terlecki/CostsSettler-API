@@ -9,10 +9,11 @@ namespace CostsSettler.Domain.Queries;
 public class GetChargesByParamsQuery : IRequest<ICollection<ChargeForListDto>>
 {
     public Guid UserId { get; set; }
-    public ChargeStatus ChargeStatus { get; set; }
     public string? DateFrom { get; set; }
     public string? DateTo { get; set; }
     public string? CircumstanceDescription { get; set; }
+    public int? AmountFrom { get; set; }
+    public int? AmountTo { get; set; }
 
     public class GetChargesByParamsQueryHandler : IRequestHandler<GetChargesByParamsQuery, ICollection<ChargeForListDto>>
     {
