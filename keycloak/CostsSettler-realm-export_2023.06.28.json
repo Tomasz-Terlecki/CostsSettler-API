@@ -523,7 +523,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "WPmKFcPu4sN2DE0E9P9fyktx66iv5BG7",
+      "secret": "${COSTSSETTLER_API_SECRET}",
       "redirectUris": [
         "*"
       ],
