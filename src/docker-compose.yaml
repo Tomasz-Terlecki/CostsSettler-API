@@ -4,7 +4,7 @@ version: '3.3'
 
 services:
   costs-settler-api:
-    image: costsettler.api:latest
+    image: costssettler.api:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=mssql,1433; Database=CostsSettler_Dev; User Id=sa; Password=Password!23; TrustServerCertificate=True
@@ -38,6 +38,6 @@ services:
       - 8080:8080
 
   spa:
-    image: costsettler.spa:latest
+    image: costssettler.spa:latest
     ports:
       - 80:80

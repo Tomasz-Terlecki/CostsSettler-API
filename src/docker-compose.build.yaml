@@ -2,7 +2,7 @@
 
 services:
   costs-settler-api:
-    image: costsettler.api:latest
+    image: costssettler.api:latest
     build:
         context: .
         dockerfile: ./CostsSettler.API/Dockerfile
