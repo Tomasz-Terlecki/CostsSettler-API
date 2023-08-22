@@ -4,14 +4,9 @@ version: '3.3'
 
 services:
   costs-settler-api:
+    env_file:
+      - costs-settler-api.env
     image: costssettler.api:latest
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=mssql,1433; Database=CostsSettler_DB; User Id=sa; Password=Password!23; TrustServerCertificate=True
-      - KeycloakClientConfig__Realm=CostsSettler
-      - KeycloakClientConfig__AuthServerUrl=http://keycloak:8080/
-      - KeycloakClientConfig__Secret=WPmKFcPu4sN2DE0E9P9fyktx66iv5BG7
-      - KeycloakClientConfig__ClientId=CostsSettler-API
     depends_on:
       - mssql
     ports:
@@ -20,9 +15,8 @@ services:
 
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Password!23
+    env_file:
+      - mssql.env
     ports:
       - "1433:1433"
 
@@ -31,9 +25,8 @@ services:
     command: -v start-dev --import-realm
     volumes:
       - ..\keycloak:/opt/keycloak/data/import
-    environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
+    env_file: 
+      - keycloak.env
     ports:
       - 8080:8080
 
