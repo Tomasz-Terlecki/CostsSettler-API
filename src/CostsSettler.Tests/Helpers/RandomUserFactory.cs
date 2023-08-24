@@ -1,32 +1,27 @@
 ﻿using CostsSettler.Domain.Models;
 
 namespace CostsSettler.Tests.Helpers;
-public class RandomUserFactory
+public class RandomUserFactory : RandomFactoryBase<User, UserAttributes>
 {
-    public User Create(Guid? id = null, ICollection<Charge>? charges = null)
+    protected override User CreateModel(Guid id, UserAttributes? attributes = null)
     {
-        id = id ?? Guid.NewGuid();
-        
         return new User
         { 
-            Id = (Guid) id,
-            FirstName = "firstName" + id.ToString(),
-            LastName = "lastName" + id.ToString(),
-            Email = "email" + id.ToString(),
-            Username = "username" + id.ToString(),
-            Charges = charges
+            Id = id,
+            FirstName = attributes?.FirstName + id.ToString(),
+            LastName = attributes?.LastName + id.ToString(),
+            Email = attributes?.Email + id.ToString(),
+            Username = attributes?.Username ?? "username" + id.ToString(),
+            Charges = attributes?.Charges ?? new List<Charge>()
         };
     }
+}
 
-    public ICollection<User> CreateCollection(int count)
-    {
-        var list = new List<User>();
-
-        for (int i = 0; i < count; i++)
-        {
-            list.Add(Create());
-        }
-
-        return list;
-    }
+public class UserAttributes
+{
+    public string? Username { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? Email { get; set; }
+    public ICollection<Charge>? Charges { get; set; }
 }

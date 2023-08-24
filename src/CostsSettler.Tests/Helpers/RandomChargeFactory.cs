@@ -2,33 +2,28 @@
 using CostsSettler.Domain.Models;
 
 namespace CostsSettler.Tests.Helpers;
-public class RandomChargeFactory
-{
-    public Charge Create(Guid? id = null, ChargeStatus? status = null,
-        Guid? debtorId = null, Guid? creditorId = null, Guid? circumstanceId = null)
-    {
-        id = id ?? Guid.NewGuid();
 
+public class RandomChargeFactory : RandomFactoryBase<Charge, ChargeAttributes>
+{
+    protected override Charge CreateModel(Guid id, ChargeAttributes? attributes = null)
+    {
         return new Charge
         {
-            Id = (Guid)id,
-            ChargeStatus = status ?? ChargeStatus.New,
-            Amount = 100,
-            CircumstanceId = circumstanceId ?? Guid.NewGuid(),
-            CreditorId = creditorId ?? Guid.NewGuid(),
-            DebtorId = debtorId ?? Guid.NewGuid()
+            Id = id,
+            Amount = attributes?.Amount ?? 100,
+            CreditorId = attributes?.CreditorId ?? Guid.NewGuid(),
+            DebtorId = attributes?.DebtorId ?? Guid.NewGuid(),
+            CircumstanceId = attributes?.CircumstanceId ?? Guid.NewGuid(),
+            ChargeStatus = attributes?.ChargeStatus ?? ChargeStatus.New,
         };
     }
+}
 
-    public ICollection<Charge> CreateCollection(int count)
-    {
-        var list = new List<Charge>();
-
-        for (int i = 0; i < count; i++)
-        {
-            list.Add(Create());
-        }
-
-        return list;
-    }
+public class ChargeAttributes 
+{
+    public decimal? Amount { get; set; }
+    public Guid? CreditorId { get; set; }
+    public Guid? DebtorId { get; set; }
+    public Guid? CircumstanceId { get; set; }
+    public ChargeStatus? ChargeStatus { get; set; }
 }

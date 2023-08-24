@@ -2,32 +2,27 @@
 using CostsSettler.Domain.Models;
 
 namespace CostsSettler.Tests.Helpers;
-public class RandomCircumstanceFactory
+public class RandomCircumstanceFactory : RandomFactoryBase<Circumstance, CircumstanceAttributes>
 {
-    public Circumstance Create(Guid? id = null, CircumstanceStatus? status = null, ICollection<Charge>? charges = null)
+    protected override Circumstance CreateModel(Guid id, CircumstanceAttributes? attributes = null)
     {
-        id = id ?? Guid.NewGuid();
-        
         return new Circumstance
         { 
-            Id = (Guid) id,
-            CircumstanceStatus = status ?? CircumstanceStatus.New,
-            DateTime = DateTime.UtcNow,
-            Description = "description" + id,
-            TotalAmount = 100,
-            Charges = charges
+            Id = id,
+            CircumstanceStatus = attributes?.CircumstanceStatus ?? CircumstanceStatus.New,
+            DateTime = attributes?.DateTime ?? DateTime.UtcNow,
+            Description = attributes?.Description ?? "description" + id,
+            TotalAmount = attributes?.TotalAmount ?? 100,
+            Charges = attributes?.Charges ?? new List<Charge>(),
         };
     }
+}
 
-    public ICollection<Circumstance> CreateCollection(int count)
-    {
-        var list = new List<Circumstance>();
-
-        for (int i = 0; i < count; i++)
-        {
-            list.Add(Create());
-        }
-
-        return list;
-    }
+public class CircumstanceAttributes
+{
+    public string? Description { get; set; }
+    public decimal? TotalAmount { get; set; }
+    public ICollection<Charge>? Charges { get; set; }
+    public DateTime? DateTime { get; set; }
+    public CircumstanceStatus? CircumstanceStatus { get; set; }
 }
