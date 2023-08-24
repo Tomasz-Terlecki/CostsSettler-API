@@ -1,0 +1,318 @@
+﻿using CostsSettler.Domain.Enums;
+using CostsSettler.Domain.Exceptions;
+using CostsSettler.Domain.Interfaces.Repositories;
+using CostsSettler.Domain.Models;
+using CostsSettler.Domain.Queries;
+using CostsSettler.Domain.Services;
+using Moq;
+
+namespace CostsSettler.Tests.Domain.Queries.Charges;
+public class GetChargeByIdQueryTests
+{
+    private Mock<IChargeRepository> _chargeRepositoryMock { get; }
+    private Mock<IUserRepository> _userRepositoryMock { get; }
+    private Mock<IIdentityService> _identityServiceMock { get; }
+
+    public GetChargeByIdQueryTests()
+    {
+        _chargeRepositoryMock = new Mock<IChargeRepository>();
+        _userRepositoryMock = new Mock<IUserRepository>();
+        _identityServiceMock = new Mock<IIdentityService>();
+    }
+
+    [Fact]
+    public void GetChargeById_ChargeExists_Test()
+    {
+        var chargeId = Guid.NewGuid();
+        var creditorId = Guid.NewGuid();
+        var debtorId = Guid.NewGuid();
+
+        var charge = new Charge
+        {
+            Id = chargeId,
+            Amount = 100,
+            ChargeStatus = ChargeStatus.New,
+            CircumstanceId = Guid.NewGuid(),
+            CreditorId = creditorId,
+            DebtorId = debtorId,
+        };
+
+        var creditor = new User
+        {
+            Id = creditorId,
+            Email = "TestEmail1",
+            FirstName = "TestFirstName1",
+            LastName = "TestLastName1",
+            Username = "TestUsername1",
+        };
+
+        var debtor = new User
+        {
+            Id = debtorId,
+            Email = "TestEmail2",
+            FirstName = "TestFirstName2",
+            LastName = "TestLastName2",
+            Username = "TestUsername2",
+        };
+
+        _chargeRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(chargeId, It.IsAny<string[]>()))
+            .ReturnsAsync(charge);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(creditorId))
+            .ReturnsAsync(creditor);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(debtorId))
+            .ReturnsAsync(debtor);
+
+        _identityServiceMock
+            .Setup(service => service.CheckIfLoggedUserIsOneOf(It.IsAny<Guid[]>()))
+            .Verifiable();
+
+        var query = new GetChargeByIdQuery(chargeId);
+        var queryHandler = new GetChargeByIdQuery.GetChargeByIdQueryHandler(
+            _chargeRepositoryMock.Object, 
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        var result = queryHandler.Handle(query, CancellationToken.None).Result;
+
+        _chargeRepositoryMock.Verify(repo => 
+            repo.GetByIdAsync(chargeId, It.IsAny<string[]>()), Times.Once);
+
+        Assert.Equal(result, charge);
+    }
+
+    [Fact]
+    public void GetChargeById_ChargeDoesNotExist_Test()
+    {
+        var chargeId = Guid.NewGuid();
+        var creditorId = Guid.NewGuid();
+        var debtorId = Guid.NewGuid();
+
+        Charge? charge = null;
+
+        var creditor = new User
+        {
+            Id = creditorId,
+            Email = "TestEmail1",
+            FirstName = "TestFirstName1",
+            LastName = "TestLastName1",
+            Username = "TestUsername1",
+        };
+
+        var debtor = new User
+        {
+            Id = debtorId,
+            Email = "TestEmail2",
+            FirstName = "TestFirstName2",
+            LastName = "TestLastName2",
+            Username = "TestUsername2",
+        };
+
+        _chargeRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(chargeId, It.IsAny<string[]>()))
+            .ReturnsAsync(charge);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(creditorId))
+            .ReturnsAsync(creditor);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(debtorId))
+            .ReturnsAsync(debtor);
+
+        _identityServiceMock
+            .Setup(service => service.CheckIfLoggedUserIsOneOf(It.IsAny<Guid[]>()))
+            .Verifiable();
+
+        var query = new GetChargeByIdQuery(chargeId);
+        var queryHandler = new GetChargeByIdQuery.GetChargeByIdQueryHandler(
+            _chargeRepositoryMock.Object,
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        var ex = Assert.ThrowsAsync<ObjectNotFoundException>(
+            () => queryHandler.Handle(query, CancellationToken.None)).Result;
+
+        Assert.Contains(chargeId.ToString(), ex.Message);
+    }
+
+    [Fact]
+    public void GetChargeById_UserUnauthorized_Test()
+    {
+        var chargeId = Guid.NewGuid();
+        var creditorId = Guid.NewGuid();
+        var debtorId = Guid.NewGuid();
+
+        var charge = new Charge
+        {
+            Id = chargeId,
+            Amount = 100,
+            ChargeStatus = ChargeStatus.New,
+            CircumstanceId = Guid.NewGuid(),
+            CreditorId = creditorId,
+            DebtorId = debtorId,
+        };
+
+        var creditor = new User
+        {
+            Id = creditorId,
+            Email = "TestEmail1",
+            FirstName = "TestFirstName1",
+            LastName = "TestLastName1",
+            Username = "TestUsername1",
+        };
+
+        var debtor = new User
+        {
+            Id = debtorId,
+            Email = "TestEmail2",
+            FirstName = "TestFirstName2",
+            LastName = "TestLastName2",
+            Username = "TestUsername2",
+        };
+
+        _chargeRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(chargeId, It.IsAny<string[]>()))
+            .ReturnsAsync(charge);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(creditorId))
+            .ReturnsAsync(creditor);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(debtorId))
+            .ReturnsAsync(debtor);
+
+        _identityServiceMock
+            .Setup(service => service.CheckIfLoggedUserIsOneOf(It.IsAny<Guid[]>()))
+            .Throws<AuthorizationException>();
+
+        var query = new GetChargeByIdQuery(chargeId);
+        var queryHandler = new GetChargeByIdQuery.GetChargeByIdQueryHandler(
+            _chargeRepositoryMock.Object,
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        Assert.ThrowsAsync<AuthorizationException>(
+            () => queryHandler.Handle(query, CancellationToken.None));
+    }
+
+    [Fact]
+    public void GetChargeById_CreditorNotFound_Test()
+    {
+        var chargeId = Guid.NewGuid();
+        var creditorId = Guid.NewGuid();
+        var debtorId = Guid.NewGuid();
+
+        var charge = new Charge
+        {
+            Id = chargeId,
+            Amount = 100,
+            ChargeStatus = ChargeStatus.New,
+            CircumstanceId = Guid.NewGuid(),
+            CreditorId = creditorId,
+            DebtorId = debtorId,
+        };
+
+        User? creditor = null;
+
+        var debtor = new User
+        {
+            Id = debtorId,
+            Email = "TestEmail2",
+            FirstName = "TestFirstName2",
+            LastName = "TestLastName2",
+            Username = "TestUsername2",
+        };
+
+        _chargeRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(chargeId, It.IsAny<string[]>()))
+            .ReturnsAsync(charge);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(creditorId))
+            .ReturnsAsync(creditor);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(debtorId))
+            .ReturnsAsync(debtor);
+
+        _identityServiceMock
+            .Setup(service => service.CheckIfLoggedUserIsOneOf(It.IsAny<Guid[]>()))
+            .Verifiable();
+
+        var query = new GetChargeByIdQuery(chargeId);
+        var queryHandler = new GetChargeByIdQuery.GetChargeByIdQueryHandler(
+            _chargeRepositoryMock.Object,
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        var ex = Assert.ThrowsAsync<ObjectNotFoundException>(
+            () => queryHandler.Handle(query, CancellationToken.None)).Result;
+        Assert.Contains(creditorId.ToString(), ex.Message);
+    }
+
+    [Fact]
+    public void GetChargeById_DebtorNotFound_Test()
+    {
+        var chargeId = Guid.NewGuid();
+        var creditorId = Guid.NewGuid();
+        var debtorId = Guid.NewGuid();
+
+        var charge = new Charge
+        {
+            Id = chargeId,
+            Amount = 100,
+            ChargeStatus = ChargeStatus.New,
+            CircumstanceId = Guid.NewGuid(),
+            CreditorId = creditorId,
+            DebtorId = debtorId,
+        };
+
+        var creditor = new User
+        {
+            Id = creditorId,
+            Email = "TestEmail1",
+            FirstName = "TestFirstName1",
+            LastName = "TestLastName1",
+            Username = "TestUsername1",
+        };
+
+        User? debtor = null;
+
+        _chargeRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(chargeId, It.IsAny<string[]>()))
+            .ReturnsAsync(charge);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(creditorId))
+            .ReturnsAsync(creditor);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(debtorId))
+            .ReturnsAsync(debtor);
+
+        _identityServiceMock
+            .Setup(service => service.CheckIfLoggedUserIsOneOf(It.IsAny<Guid[]>()))
+            .Verifiable();
+
+        var query = new GetChargeByIdQuery(chargeId);
+        var queryHandler = new GetChargeByIdQuery.GetChargeByIdQueryHandler(
+            _chargeRepositoryMock.Object,
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        var ex = Assert.ThrowsAsync<ObjectNotFoundException>(
+            () => queryHandler.Handle(query, CancellationToken.None)).Result;
+        Assert.Contains(debtorId.ToString(), ex.Message);
+    }
+}
