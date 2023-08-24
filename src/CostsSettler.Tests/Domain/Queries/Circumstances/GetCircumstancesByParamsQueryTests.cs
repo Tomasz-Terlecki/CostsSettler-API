@@ -66,6 +66,7 @@ public class GetCircumstancesByParamsQueryTests
 
         var expected = _mapper.Map<ICollection<CircumstanceForListDto>>(circumstances);
 
+        Assert.Equal(expected.Count, result.Count);
         foreach (var item in expected)
             Assert.Contains(item, expected);
     }

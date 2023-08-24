@@ -8,9 +8,9 @@ public class RandomUserFactory : RandomFactoryBase<User, UserAttributes>
         return new User
         { 
             Id = id,
-            FirstName = attributes?.FirstName + id.ToString(),
-            LastName = attributes?.LastName + id.ToString(),
-            Email = attributes?.Email + id.ToString(),
+            FirstName = attributes?.FirstName ?? "firstName" + id.ToString(),
+            LastName = attributes?.LastName ?? "lastName" + id.ToString(),
+            Email = attributes?.Email ?? "email" + id.ToString(),
             Username = attributes?.Username ?? "username" + id.ToString(),
             Charges = attributes?.Charges ?? new List<Charge>()
         };

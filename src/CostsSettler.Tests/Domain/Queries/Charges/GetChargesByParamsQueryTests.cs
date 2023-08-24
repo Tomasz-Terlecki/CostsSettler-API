@@ -59,6 +59,7 @@ public class GetChargesByParamsQueryTests
 
         var expected = _mapper.Map<ICollection<ChargeForListDto>>(charges);
 
+        Assert.Equal(expected.Count, result.Count);
         foreach (var item in expected)
             Assert.Contains(item, expected);
     }
