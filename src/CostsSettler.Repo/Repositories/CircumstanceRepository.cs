@@ -24,8 +24,6 @@ public class CircumstanceRepository : RepositoryBase<Circumstance>, ICircumstanc
 
     public override Task<bool> AddAsync(Circumstance circumstance)
     {
-        circumstance.FixCircumstanceStatus();
-        
         return base.AddAsync(circumstance);
     }
     

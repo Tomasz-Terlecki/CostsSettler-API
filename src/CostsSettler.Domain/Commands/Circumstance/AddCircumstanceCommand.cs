@@ -66,6 +66,8 @@ public class AddCircumstanceCommand : IRequest<bool>
                 Charges = charges
             };
             
+            circumstance.FixCircumstanceStatus();
+
             return await _circumstanceRepository.AddAsync(circumstance);
         }
 
