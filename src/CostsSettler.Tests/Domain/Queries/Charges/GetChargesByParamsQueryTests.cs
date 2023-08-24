@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using CostsSettler.Domain.Dtos;
-using CostsSettler.Domain.Enums;
 using CostsSettler.Domain.Exceptions;
 using CostsSettler.Domain.Interfaces.Repositories;
-using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Profiles;
 using CostsSettler.Domain.Queries;
 using CostsSettler.Domain.Services;

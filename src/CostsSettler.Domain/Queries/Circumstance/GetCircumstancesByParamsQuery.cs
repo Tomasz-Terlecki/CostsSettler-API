@@ -9,13 +9,13 @@ public class GetCircumstancesByParamsQuery : IRequest<ICollection<CircumstanceFo
 {
     public Guid UserId { get; set; }
 
-    public class GetCircumstancesQueryHandler : IRequestHandler<GetCircumstancesByParamsQuery, ICollection<CircumstanceForListDto>>
+    public class GetCircumstancesByParamsQueryHandler : IRequestHandler<GetCircumstancesByParamsQuery, ICollection<CircumstanceForListDto>>
     {
         private readonly ICircumstanceRepository _repository;
         private readonly IMapper _mapper;
         private readonly IIdentityService _identityService;
 
-        public GetCircumstancesQueryHandler(ICircumstanceRepository repository, 
+        public GetCircumstancesByParamsQueryHandler(ICircumstanceRepository repository, 
             IMapper mapper, IIdentityService identityService)
         {
             _repository = repository;
