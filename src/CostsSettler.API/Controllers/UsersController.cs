@@ -18,7 +18,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetByParams([FromQuery] GetUsersQuery query)
+    public async Task<IActionResult> GetByParams([FromQuery] GetUsersByParamsQuery query)
     {
         var result = await _mediator.Send(query);
 

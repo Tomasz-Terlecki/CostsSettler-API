@@ -4,22 +4,22 @@ using CostsSettler.Domain.Interfaces.Repositories;
 using MediatR;
 
 namespace CostsSettler.Domain.Queries;
-public class GetUsersQuery : IRequest<ICollection<UserForListDto>>
+public class GetUsersByParamsQuery : IRequest<ICollection<UserForListDto>>
 {
     public string? Email { get; set; }
 
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ICollection<UserForListDto>>
+    public class GetUsersByParamsQueryHandler : IRequestHandler<GetUsersByParamsQuery, ICollection<UserForListDto>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public GetUsersQueryHandler(IUserRepository userRepository, IMapper mapper)
+        public GetUsersByParamsQueryHandler(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;
         }
 
-        public async Task<ICollection<UserForListDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+        public async Task<ICollection<UserForListDto>> Handle(GetUsersByParamsQuery request, CancellationToken cancellationToken)
         {
             var users = (await _userRepository.GetAllAsync()).ToList();
 
