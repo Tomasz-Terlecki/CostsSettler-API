@@ -8,7 +8,7 @@ public class RandomChargeFactory : RandomFactoryBase<Charge, ChargeAttributes>
     protected override Charge CreateModel(Guid id, ChargeAttributes? attributes = null)
     {
         var creditorId = attributes?.CreditorId ?? attributes?.Creditor?.Id ?? Guid.NewGuid();
-        var debtorId = attributes?.CreditorId ?? attributes?.Debtor?.Id ?? Guid.NewGuid();
+        var debtorId = attributes?.DebtorId ?? attributes?.Debtor?.Id ?? Guid.NewGuid();
         
         return new Charge
         {
