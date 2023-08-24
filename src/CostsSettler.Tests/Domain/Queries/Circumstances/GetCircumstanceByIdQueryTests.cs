@@ -1,15 +1,9 @@
-﻿using CostsSettler.Domain.Enums;
-using CostsSettler.Domain.Interfaces.Repositories;
+﻿using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Queries;
 using CostsSettler.Domain.Services;
 using CostsSettler.Tests.Helpers;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CostsSettler.Tests.Domain.Queries.Circumstances;
 public class GetCircumstanceByIdQueryTests
@@ -34,7 +28,7 @@ public class GetCircumstanceByIdQueryTests
     }
 
     [Fact]
-    public void GetChargeById_ChargeExists_Test()
+    public void GetCircumstanceById_CircumstanceExists_Test()
     {
         var circumstanceId = Guid.NewGuid();
         var creditorId1 = Guid.NewGuid();
@@ -42,22 +36,29 @@ public class GetCircumstanceByIdQueryTests
         var debtorId1 = Guid.NewGuid();
         var debtorId2 = Guid.NewGuid();
 
-        var charge1 = new Charge
-        {
-            Id = Guid.NewGuid(),
-            CircumstanceId = circumstanceId,
-            CreditorId = creditorId1,
-            DebtorId = debtorId1
-        };
-        var charge2 = new Charge
-        {
-            Id = Guid.NewGuid(),
-            CircumstanceId = circumstanceId,
-            CreditorId = creditorId2,
-            DebtorId = debtorId2
-        };
+        var creditor1 = _randomUserFactory.Create(creditorId1);
+        var creditor2 = _randomUserFactory.Create(creditorId2);
+        var debtor1 = _randomUserFactory.Create(debtorId1);
+        var debtor2 = _randomUserFactory.Create(debtorId2);
 
-        var circumstance = _randomCircumstanceFactory.Create(circumstanceId, charges: new List<Charge> { charge1, charge2 });
+        var charge1 = _randomChargeFactory.Create(Guid.NewGuid(), new ChargeAttributes 
+        {
+            CircumstanceId = circumstanceId,
+            Creditor = creditor1,
+            Debtor = debtor1
+        });
+        var charge2 = _randomChargeFactory.Create(Guid.NewGuid(), new ChargeAttributes 
+        {
+            CircumstanceId = circumstanceId,
+            Creditor = creditor2,
+            Debtor = debtor2
+        });
+
+        var circumstance = _randomCircumstanceFactory.Create(circumstanceId, 
+            new CircumstanceAttributes 
+            { 
+                Charges = new List<Charge> { charge1, charge2 } 
+            });
 
         _circumstanceRepositoryMock
             .Setup(repo => repo.GetByIdAsync(circumstanceId, It.IsAny<string[]>()))
@@ -65,18 +66,26 @@ public class GetCircumstanceByIdQueryTests
 
         _userRepositoryMock
             .Setup(repo => repo.GetByIdAsync(creditorId1))
-            .ReturnsAsync(creditor);
+            .ReturnsAsync(creditor1);
 
         _userRepositoryMock
-            .Setup(repo => repo.GetByIdAsync(debtorId))
-            .ReturnsAsync(debtor);
+            .Setup(repo => repo.GetByIdAsync(creditorId2))
+            .ReturnsAsync(creditor2);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(debtorId1))
+            .ReturnsAsync(debtor1);
+
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(debtorId2))
+            .ReturnsAsync(debtor2);
 
         _identityServiceMock
             .Setup(service => service.CheckIfLoggedUserIsOneOf(It.IsAny<Guid[]>()))
             .Verifiable();
 
-        var query = new GetChargeByIdQuery(circumstanceId);
-        var queryHandler = new GetChargeByIdQuery.GetChargeByIdQueryHandler(
+        var query = new GetCircumstanceByIdQuery(circumstanceId);
+        var queryHandler = new GetCircumstanceByIdQuery.GetCircumstanceByIdQueryHandler(
             _circumstanceRepositoryMock.Object,
             _userRepositoryMock.Object,
             _identityServiceMock.Object
