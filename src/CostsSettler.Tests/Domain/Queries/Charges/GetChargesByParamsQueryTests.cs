@@ -7,6 +7,7 @@ using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Profiles;
 using CostsSettler.Domain.Queries;
 using CostsSettler.Domain.Services;
+using CostsSettler.Tests.Helpers;
 using Moq;
 
 namespace CostsSettler.Tests.Domain.Queries.Charges;
@@ -16,6 +17,8 @@ public class GetChargesByParamsQueryTests
     private Mock<IIdentityService> _identityServiceMock { get; }
     private IMapper _mapper { get; }
 
+    private RandomChargeFactory _randomChargeFactory { get; }
+
     public GetChargesByParamsQueryTests()
     {
         _chargeRepositoryMock = new Mock<IChargeRepository>();
@@ -24,6 +27,8 @@ public class GetChargesByParamsQueryTests
         _mapper = new MapperConfiguration(cfg =>
                 cfg.AddProfile(new AutoMapperProfiles()))
             .CreateMapper();
+
+        _randomChargeFactory = new RandomChargeFactory();
     }
 
     [Fact]
@@ -31,35 +36,7 @@ public class GetChargesByParamsQueryTests
     {
         var userId = Guid.NewGuid();
 
-        var charges = new List<Charge>
-        {
-            new Charge
-            {
-                Id = Guid.NewGuid(),
-                Amount = 100,
-                ChargeStatus = ChargeStatus.New,
-                CircumstanceId = Guid.NewGuid(),
-                CreditorId = Guid.NewGuid(),
-                DebtorId = Guid.NewGuid(),
-                Circumstance = new Circumstance
-                {
-                    DateTime = DateTime.Now,
-                }
-            },
-            new Charge
-            {
-                Id = Guid.NewGuid(),
-                Amount = 50,
-                ChargeStatus = ChargeStatus.Accepted,
-                CircumstanceId = Guid.NewGuid(),
-                CreditorId = Guid.NewGuid(),
-                DebtorId = Guid.NewGuid(),
-                Circumstance = new Circumstance
-                {
-                    DateTime = DateTime.Now,
-                }
-            }
-        };
+        var charges = _randomChargeFactory.CreateCollection(5);
 
         var query = new GetChargesByParamsQuery {};
 
@@ -93,35 +70,7 @@ public class GetChargesByParamsQueryTests
     {
         var userId = Guid.NewGuid();
 
-        var charges = new List<Charge>
-        {
-            new Charge
-            {
-                Id = Guid.NewGuid(),
-                Amount = 100,
-                ChargeStatus = ChargeStatus.New,
-                CircumstanceId = Guid.NewGuid(),
-                CreditorId = Guid.NewGuid(),
-                DebtorId = Guid.NewGuid(),
-                Circumstance = new Circumstance
-                {
-                    DateTime = DateTime.Now,
-                }
-            },
-            new Charge
-            {
-                Id = Guid.NewGuid(),
-                Amount = 50,
-                ChargeStatus = ChargeStatus.Accepted,
-                CircumstanceId = Guid.NewGuid(),
-                CreditorId = Guid.NewGuid(),
-                DebtorId = Guid.NewGuid(),
-                Circumstance = new Circumstance
-                {
-                    DateTime = DateTime.Now,
-                }
-            }
-        };
+        var charges = _randomChargeFactory.CreateCollection(5);
 
         var query = new GetChargesByParamsQuery { };
 

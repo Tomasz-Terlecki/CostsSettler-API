@@ -4,6 +4,7 @@ using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Queries;
 using CostsSettler.Domain.Services;
+using CostsSettler.Tests.Helpers;
 using Moq;
 
 namespace CostsSettler.Tests.Domain.Queries.Charges;
@@ -13,11 +14,17 @@ public class GetChargeByIdQueryTests
     private Mock<IUserRepository> _userRepositoryMock { get; }
     private Mock<IIdentityService> _identityServiceMock { get; }
 
+    private RandomChargeFactory _randomChargeFactory { get; }
+    private RandomUserFactory _randomUserFactory { get; }
+
     public GetChargeByIdQueryTests()
     {
         _chargeRepositoryMock = new Mock<IChargeRepository>();
         _userRepositoryMock = new Mock<IUserRepository>();
         _identityServiceMock = new Mock<IIdentityService>();
+
+        _randomChargeFactory = new RandomChargeFactory();
+        _randomUserFactory = new RandomUserFactory();
     }
 
     [Fact]
@@ -27,33 +34,15 @@ public class GetChargeByIdQueryTests
         var creditorId = Guid.NewGuid();
         var debtorId = Guid.NewGuid();
 
-        var charge = new Charge
+        var charge = _randomChargeFactory.Create(chargeId, new ChargeAttributes 
         {
-            Id = chargeId,
-            Amount = 100,
-            ChargeStatus = ChargeStatus.New,
-            CircumstanceId = Guid.NewGuid(),
-            CreditorId = creditorId,
-            DebtorId = debtorId,
-        };
+            CreditorId = creditorId, 
+            DebtorId = debtorId
+        });
 
-        var creditor = new User
-        {
-            Id = creditorId,
-            Email = "TestEmail1",
-            FirstName = "TestFirstName1",
-            LastName = "TestLastName1",
-            Username = "TestUsername1",
-        };
+        var creditor = _randomUserFactory.Create(creditorId);
 
-        var debtor = new User
-        {
-            Id = debtorId,
-            Email = "TestEmail2",
-            FirstName = "TestFirstName2",
-            LastName = "TestLastName2",
-            Username = "TestUsername2",
-        };
+        var debtor = _randomUserFactory.Create(debtorId);
 
         _chargeRepositoryMock
             .Setup(repo => repo.GetByIdAsync(chargeId, It.IsAny<string[]>()))
@@ -95,23 +84,9 @@ public class GetChargeByIdQueryTests
 
         Charge? charge = null;
 
-        var creditor = new User
-        {
-            Id = creditorId,
-            Email = "TestEmail1",
-            FirstName = "TestFirstName1",
-            LastName = "TestLastName1",
-            Username = "TestUsername1",
-        };
+        var creditor = _randomUserFactory.Create(creditorId);
 
-        var debtor = new User
-        {
-            Id = debtorId,
-            Email = "TestEmail2",
-            FirstName = "TestFirstName2",
-            LastName = "TestLastName2",
-            Username = "TestUsername2",
-        };
+        var debtor = _randomUserFactory.Create(debtorId);
 
         _chargeRepositoryMock
             .Setup(repo => repo.GetByIdAsync(chargeId, It.IsAny<string[]>()))
@@ -149,33 +124,15 @@ public class GetChargeByIdQueryTests
         var creditorId = Guid.NewGuid();
         var debtorId = Guid.NewGuid();
 
-        var charge = new Charge
+        var charge = _randomChargeFactory.Create(chargeId, new ChargeAttributes 
         {
-            Id = chargeId,
-            Amount = 100,
-            ChargeStatus = ChargeStatus.New,
-            CircumstanceId = Guid.NewGuid(),
-            CreditorId = creditorId,
-            DebtorId = debtorId,
-        };
+            CreditorId = creditorId, 
+            DebtorId = debtorId
+        });
 
-        var creditor = new User
-        {
-            Id = creditorId,
-            Email = "TestEmail1",
-            FirstName = "TestFirstName1",
-            LastName = "TestLastName1",
-            Username = "TestUsername1",
-        };
+        var creditor = _randomUserFactory.Create(creditorId);
 
-        var debtor = new User
-        {
-            Id = debtorId,
-            Email = "TestEmail2",
-            FirstName = "TestFirstName2",
-            LastName = "TestLastName2",
-            Username = "TestUsername2",
-        };
+        var debtor = _randomUserFactory.Create(debtorId);
 
         _chargeRepositoryMock
             .Setup(repo => repo.GetByIdAsync(chargeId, It.IsAny<string[]>()))
@@ -211,26 +168,15 @@ public class GetChargeByIdQueryTests
         var creditorId = Guid.NewGuid();
         var debtorId = Guid.NewGuid();
 
-        var charge = new Charge
+        var charge = _randomChargeFactory.Create(chargeId, new ChargeAttributes 
         {
-            Id = chargeId,
-            Amount = 100,
-            ChargeStatus = ChargeStatus.New,
-            CircumstanceId = Guid.NewGuid(),
-            CreditorId = creditorId,
-            DebtorId = debtorId,
-        };
+            CreditorId = creditorId, 
+            DebtorId = debtorId
+        });
 
         User? creditor = null;
 
-        var debtor = new User
-        {
-            Id = debtorId,
-            Email = "TestEmail2",
-            FirstName = "TestFirstName2",
-            LastName = "TestLastName2",
-            Username = "TestUsername2",
-        };
+        var debtor = _randomUserFactory.Create(debtorId);
 
         _chargeRepositoryMock
             .Setup(repo => repo.GetByIdAsync(chargeId, It.IsAny<string[]>()))
@@ -267,24 +213,13 @@ public class GetChargeByIdQueryTests
         var creditorId = Guid.NewGuid();
         var debtorId = Guid.NewGuid();
 
-        var charge = new Charge
+        var charge = _randomChargeFactory.Create(chargeId, new ChargeAttributes 
         {
-            Id = chargeId,
-            Amount = 100,
-            ChargeStatus = ChargeStatus.New,
-            CircumstanceId = Guid.NewGuid(),
-            CreditorId = creditorId,
-            DebtorId = debtorId,
-        };
+            CreditorId = creditorId, 
+            DebtorId = debtorId
+        });
 
-        var creditor = new User
-        {
-            Id = creditorId,
-            Email = "TestEmail1",
-            FirstName = "TestFirstName1",
-            LastName = "TestLastName1",
-            Username = "TestUsername1",
-        };
+        var creditor = _randomUserFactory.Create(creditorId);
 
         User? debtor = null;
 

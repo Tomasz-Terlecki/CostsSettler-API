@@ -15,6 +15,10 @@ public class RandomChargeFactory : RandomFactoryBase<Charge, ChargeAttributes>
             DebtorId = attributes?.DebtorId ?? Guid.NewGuid(),
             CircumstanceId = attributes?.CircumstanceId ?? Guid.NewGuid(),
             ChargeStatus = attributes?.ChargeStatus ?? ChargeStatus.New,
+            Circumstance = attributes?.Circumstance ?? new Circumstance
+            {
+                DateTime = DateTime.Now
+            }
         };
     }
 }
@@ -26,4 +30,5 @@ public class ChargeAttributes
     public Guid? DebtorId { get; set; }
     public Guid? CircumstanceId { get; set; }
     public ChargeStatus? ChargeStatus { get; set; }
+    public Circumstance? Circumstance { get; set; }
 }
