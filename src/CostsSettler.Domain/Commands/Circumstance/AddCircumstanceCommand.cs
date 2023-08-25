@@ -38,10 +38,10 @@ public class AddCircumstanceCommand : IRequest<bool>
                 throw new ObjectReferenceException($"The creditor cannot be added as debtor");
 
             foreach (var debtorId in request.DebtorsIds)
-                if (debtorId == Guid.Empty || !(await _userRepository.ExistsAsync(debtorId)))
+                if (debtorId == Guid.Empty || !await _userRepository.ExistsAsync(debtorId))
                     throw new ObjectNotFoundException(typeof(User), debtorId);
 
-            if (request.CreditorId == Guid.Empty || !(await _userRepository.ExistsAsync(request.CreditorId)))
+            if (request.CreditorId == Guid.Empty || !await _userRepository.ExistsAsync(request.CreditorId))
                 throw new ObjectNotFoundException(typeof(User), request.CreditorId);
 
             var membersCount = request.DebtorsIds.Count + 1;
