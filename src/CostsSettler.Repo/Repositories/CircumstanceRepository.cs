@@ -21,16 +21,4 @@ public class CircumstanceRepository : RepositoryBase<Circumstance>, ICircumstanc
 
         return await query.Include(circumstance => circumstance.Charges).ToListAsync();
     }
-
-    public override Task<bool> AddAsync(Circumstance circumstance)
-    {
-        return base.AddAsync(circumstance);
-    }
-    
-    public override Task<bool> UpdateAsync(Circumstance circumstance)
-    {
-        circumstance.FixCircumstanceStatus();
-        
-        return base.UpdateAsync(circumstance);
-    }
 }

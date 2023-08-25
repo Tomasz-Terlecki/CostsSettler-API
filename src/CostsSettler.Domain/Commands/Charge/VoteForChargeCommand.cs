@@ -62,6 +62,8 @@ public class VoteForChargeCommand : IRequest<bool>
                     throw new ObjectReferenceException($"Could not vote for charge, because charge vote was {request.ChargeVote}");
             }
 
+            circumstance.FixCircumstanceStatus();
+
             return await _repository.UpdateAsync(charge) && await _circumstanceRepository.UpdateAsync(circumstance);
         }
     }

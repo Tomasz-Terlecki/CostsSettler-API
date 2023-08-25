@@ -41,6 +41,7 @@ public class SettleChargeCommand : IRequest<bool>
 
             
             charge.ChargeStatus = ChargeStatus.Settled;
+            circumstance.FixCircumstanceStatus();
 
             return await _repository.UpdateAsync(charge) && await _circumstanceRepository.UpdateAsync(circumstance);
         }
