@@ -1,4 +1,5 @@
 using CostsSettler.Domain.Commands;
+using CostsSettler.Domain.Exceptions;
 using CostsSettler.Domain.Interfaces.Repositories;
 using CostsSettler.Domain.Models;
 using CostsSettler.Domain.Services;
@@ -64,23 +65,8 @@ public class AddCircumstanceCommandTests
 
         var result = commandHandler.Handle(command, CancellationToken.None).Result;
 
-        var dateTime = new DateTime(2023, 11, 14, 12, 15, 0);
         _circumstanceRepositoryMock.Verify(repo =>
-            repo.AddAsync(It.IsAny<Circumstance>(/*circumstance => TODO
-                circumstance.TotalAmount == command.TotalAmount &&
-                circumstance.Description == command.Description &&
-                circumstance.DateTime == dateTime &&
-                circumstance.CircumstanceStatus == CircumstanceStatus.New &&
-                circumstance.Charges != null &&
-                circumstance.Charges.Count == debtorsIds.Count &&
-                circumstance.Charges.Any(charge => charge.CreditorId == creditorId) &&
-                circumstance.Charges.All(charge => 
-                    debtorsIds.Contains(charge.DebtorId) &&
-                    charge.Amount == (decimal)25.63 &&
-                    charge.ChargeStatus == ChargeStatus.New &&
-                    charge.DateTime == dateTime
-                )*/
-            )),
+            repo.AddAsync(It.IsAny<Circumstance>()),
             Times.Once);
 
         foreach (var userId in debtorsIds)
@@ -90,6 +76,226 @@ public class AddCircumstanceCommandTests
         _userRepositoryMock.Verify(repo =>
             repo.ExistsAsync(creditorId), Times.Once);
 
-        Assert.Equal(true, result);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void AddCircumstance_DebtorsListContainsCreditor_Test()
+    {
+        var creditorId = Guid.NewGuid();
+        var debtorsIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), creditorId };
+
+        _identityServiceMock
+            .Setup(service => service.CheckEqualityWithLoggedUserId(creditorId))
+            .Verifiable();
+
+        _circumstanceRepositoryMock
+            .Setup(repo => repo.AddAsync(It.IsAny<Circumstance>()))
+            .ReturnsAsync(true);
+
+        _userRepositoryMock
+            .Setup(repo => repo.ExistsAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(true);
+
+        var command = new AddCircumstanceCommand
+        {
+            Description = "testDesc",
+            TotalAmount = (decimal)102.5,
+            DebtorsIds = debtorsIds,
+            Date = "2023-11-14",
+            Time = "12:15",
+            CreditorId = creditorId
+        };
+
+        var commandHandler = new AddCircumstanceCommand.AddCircumstanceCommandHandler(
+            _circumstanceRepositoryMock.Object,
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        _circumstanceRepositoryMock.Verify(repo =>
+            repo.AddAsync(It.IsAny<Circumstance>()),
+            Times.Never);
+
+        Assert.ThrowsAsync<ObjectReferenceException>(
+            () => commandHandler.Handle(command, CancellationToken.None));
+    }
+
+    [Fact]
+    public void AddCircumstance_DebtorDoesNotExist_Test()
+    {
+        var creditorId = Guid.NewGuid();
+        var notExistingDebtorId = Guid.NewGuid();
+        var debtorsIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), notExistingDebtorId };
+
+        _identityServiceMock
+            .Setup(service => service.CheckEqualityWithLoggedUserId(creditorId))
+            .Verifiable();
+
+        _circumstanceRepositoryMock
+            .Setup(repo => repo.AddAsync(It.IsAny<Circumstance>()))
+            .ReturnsAsync(true);
+
+        _userRepositoryMock
+            .Setup(repo => repo.ExistsAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(true);
+
+        _userRepositoryMock
+            .Setup(repo => repo.ExistsAsync(notExistingDebtorId))
+            .ReturnsAsync(false);
+
+        var command = new AddCircumstanceCommand
+        {
+            Description = "testDesc",
+            TotalAmount = (decimal)102.5,
+            DebtorsIds = debtorsIds,
+            Date = "2023-11-14",
+            Time = "12:15",
+            CreditorId = creditorId
+        };
+
+        var commandHandler = new AddCircumstanceCommand.AddCircumstanceCommandHandler(
+            _circumstanceRepositoryMock.Object,
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        _circumstanceRepositoryMock.Verify(repo =>
+            repo.AddAsync(It.IsAny<Circumstance>()),
+            Times.Never);
+
+        Assert.ThrowsAsync<ObjectNotFoundException>(
+            () => commandHandler.Handle(command, CancellationToken.None));
+    }
+
+    [Fact]
+    public void AddCircumstance_DebtorIdEmpty_Test()
+    {
+        var creditorId = Guid.NewGuid();
+        var debtorsIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.Empty };
+
+        _identityServiceMock
+            .Setup(service => service.CheckEqualityWithLoggedUserId(creditorId))
+            .Verifiable();
+
+        _circumstanceRepositoryMock
+            .Setup(repo => repo.AddAsync(It.IsAny<Circumstance>()))
+            .ReturnsAsync(true);
+
+        _userRepositoryMock
+            .Setup(repo => repo.ExistsAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(true);
+
+        
+        var command = new AddCircumstanceCommand
+        {
+            Description = "testDesc",
+            TotalAmount = (decimal)102.5,
+            DebtorsIds = debtorsIds,
+            Date = "2023-11-14",
+            Time = "12:15",
+            CreditorId = creditorId
+        };
+
+        var commandHandler = new AddCircumstanceCommand.AddCircumstanceCommandHandler(
+            _circumstanceRepositoryMock.Object,
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        _circumstanceRepositoryMock.Verify(repo =>
+            repo.AddAsync(It.IsAny<Circumstance>()),
+            Times.Never);
+
+        Assert.ThrowsAsync<ObjectNotFoundException>(
+            () => commandHandler.Handle(command, CancellationToken.None));
+    }
+
+    [Fact]
+    public void AddCircumstance_CreditorDoesNotExist_Test()
+    {
+        var creditorId = Guid.NewGuid();
+        var debtorsIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+
+        _identityServiceMock
+            .Setup(service => service.CheckEqualityWithLoggedUserId(creditorId))
+            .Verifiable();
+
+        _circumstanceRepositoryMock
+            .Setup(repo => repo.AddAsync(It.IsAny<Circumstance>()))
+            .ReturnsAsync(true);
+
+        _userRepositoryMock
+            .Setup(repo => repo.ExistsAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(true);
+
+        _userRepositoryMock
+            .Setup(repo => repo.ExistsAsync(creditorId))
+            .ReturnsAsync(false);
+
+        var command = new AddCircumstanceCommand
+        {
+            Description = "testDesc",
+            TotalAmount = (decimal)102.5,
+            DebtorsIds = debtorsIds,
+            Date = "2023-11-14",
+            Time = "12:15",
+            CreditorId = creditorId
+        };
+
+        var commandHandler = new AddCircumstanceCommand.AddCircumstanceCommandHandler(
+            _circumstanceRepositoryMock.Object,
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        _circumstanceRepositoryMock.Verify(repo =>
+            repo.AddAsync(It.IsAny<Circumstance>()),
+            Times.Never);
+
+        Assert.ThrowsAsync<ObjectNotFoundException>(
+            () => commandHandler.Handle(command, CancellationToken.None));
+    }
+
+    [Fact]
+    public void AddCircumstance_CreditorIdEmpty_Test()
+    {
+        var creditorId = Guid.Empty;
+        var debtorsIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+
+        _identityServiceMock
+            .Setup(service => service.CheckEqualityWithLoggedUserId(creditorId))
+            .Verifiable();
+
+        _circumstanceRepositoryMock
+            .Setup(repo => repo.AddAsync(It.IsAny<Circumstance>()))
+            .ReturnsAsync(true);
+
+        _userRepositoryMock
+            .Setup(repo => repo.ExistsAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(true);
+
+        var command = new AddCircumstanceCommand
+        {
+            Description = "testDesc",
+            TotalAmount = (decimal)102.5,
+            DebtorsIds = debtorsIds,
+            Date = "2023-11-14",
+            Time = "12:15",
+            CreditorId = creditorId
+        };
+
+        var commandHandler = new AddCircumstanceCommand.AddCircumstanceCommandHandler(
+            _circumstanceRepositoryMock.Object,
+            _userRepositoryMock.Object,
+            _identityServiceMock.Object
+        );
+
+        _circumstanceRepositoryMock.Verify(repo =>
+            repo.AddAsync(It.IsAny<Circumstance>()),
+            Times.Never);
+
+        Assert.ThrowsAsync<ObjectNotFoundException>(
+            () => commandHandler.Handle(command, CancellationToken.None));
     }
 }
