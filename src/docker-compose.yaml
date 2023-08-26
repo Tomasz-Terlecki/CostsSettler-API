@@ -17,6 +17,8 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     env_file:
       - mssql.env
+    volumes:
+      - ..\tmp\mssql:/var/opt/mssql/data
     ports:
       - "1433:1433"
 
@@ -25,7 +27,7 @@ services:
     command: -v start-dev --import-realm
     volumes:
       - ..\keycloak\import:/opt/keycloak/data/import
-      - ..\keycloak\tmp:/opt/keycloak/data/h2
+      - ..\tmp\keycloak:/opt/keycloak/data/h2
     env_file: 
       - keycloak.env
     ports:
