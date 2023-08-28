@@ -1,7 +1,44 @@
 .login-pf body {
-  background: #d8d9dfcf;
+  background: white;
 }
   
 #kc-header {
   display: none;
+}
+
+.login-pf-page {
+  padding-top: 200px;
+
+  & .card-pf {
+    box-shadow: none;
+    border-radius: 10px;
+    background-color: #e3f2fd;
+    border: none;
+  }
+}
+
+.pf-c-button {
+  border: none;
+  border-radius: 8px;
+}
+
+.pf-c-button::after {
+  border: none;
+  border-radius: 8px;
+}
+
+.pf-c-form-control {
+  border-radius: 8px;
+  border-bottom-color: var(--pf-c-form-control--BorderTopColor);
+}
+
+.pf-c-form-control::after {
+  border-radius: 8px;
+  border-bottom-color: var(--pf-c-form-control--BorderTopColor);
+}
+
+.login-pf-signup {
+  & #kc-info-wrapper {
+    border-radius: 10px;
+  }
 }
