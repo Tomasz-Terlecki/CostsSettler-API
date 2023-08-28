@@ -23,7 +23,7 @@ services:
       - "1433:1433"
 
   keycloak:
-    image: costssettler.api:latest
+    image: costssettler.keycloak:latest
     command: -v start-dev --import-realm
     volumes:
       - ..\tmp\keycloak:/opt/keycloak/data/h2
