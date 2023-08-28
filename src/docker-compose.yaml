@@ -23,10 +23,9 @@ services:
       - "1433:1433"
 
   keycloak:
-    image: quay.io/keycloak/keycloak:21.1
+    image: costssettler.api:latest
     command: -v start-dev --import-realm
     volumes:
-      - ..\keycloak\import:/opt/keycloak/data/import
       - ..\tmp\keycloak:/opt/keycloak/data/h2
     env_file: 
       - keycloak.env

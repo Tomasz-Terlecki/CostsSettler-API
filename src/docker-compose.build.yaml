@@ -6,3 +6,9 @@ services:
     build:
         context: .
         dockerfile: ./CostsSettler.API/Dockerfile
+
+  keycloak:
+    image: costssettler.keycloak:latest
+    build: 
+      context: ..\keycloak
+      dockerfile: ./Dockerfile

@@ -1,4 +1,4 @@
-# docker compose -f docker-compose.build.yaml up -d --build
+# docker compose -f docker-compose.development.yaml up -d --build
 
 version: '3.3'
 
@@ -31,10 +31,11 @@ services:
       - "1433:1433"
 
   keycloak:
-    image: quay.io/keycloak/keycloak:21.1
+    build: 
+      context: ..\keycloak
+      dockerfile: ./Dockerfile
     command: -v start-dev --import-realm
     volumes:
-      - ..\keycloak\import:/opt/keycloak/data/import
       - ..\tmp\keycloak:/opt/keycloak/data/h2
     environment:
       - KEYCLOAK_ADMIN=admin
