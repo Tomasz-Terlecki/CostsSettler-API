@@ -3,15 +3,23 @@ using System.Text.Json;
 
 namespace CostsSettler.API.Middlewares;
 
+/// <summary>
+/// Representation of error response.
+/// </summary>
 public class ErrorResponse
 {
-    public int StatusCode { get; set; } = (int)HttpStatusCode.InternalServerError;
-    public string Message { get; set; }
+    private int _statusCode { get; set; } = (int)HttpStatusCode.InternalServerError;
+    private string _message { get; set; }
 
+    /// <summary>
+    /// Creates new ErrorResponse.
+    /// </summary>
+    /// <param name="statusCode">HTTP response status code.</param>
+    /// <param name="message">Error message sent with a response.</param>
     public ErrorResponse(int statusCode, string message)
     {
-        StatusCode = statusCode;
-        Message = message;
+        _statusCode = statusCode;
+        _message = message;
     }
 
     public override string ToString()
