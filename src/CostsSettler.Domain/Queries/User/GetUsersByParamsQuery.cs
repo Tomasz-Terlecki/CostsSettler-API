@@ -6,8 +6,6 @@ using MediatR;
 namespace CostsSettler.Domain.Queries;
 public class GetUsersByParamsQuery : IRequest<ICollection<UserForListDto>>
 {
-    public string? Email { get; set; }
-
     public class GetUsersByParamsQueryHandler : IRequestHandler<GetUsersByParamsQuery, ICollection<UserForListDto>>
     {
         private readonly IUserRepository _userRepository;
@@ -22,9 +20,6 @@ public class GetUsersByParamsQuery : IRequest<ICollection<UserForListDto>>
         public async Task<ICollection<UserForListDto>> Handle(GetUsersByParamsQuery request, CancellationToken cancellationToken)
         {
             var users = (await _userRepository.GetAllAsync()).ToList();
-
-            if (!string.IsNullOrEmpty(request.Email))
-                users = users.Where(user => user.Email.Contains(request.Email)).ToList();
 
             return _mapper.Map<ICollection<UserForListDto>>(users);
         }
