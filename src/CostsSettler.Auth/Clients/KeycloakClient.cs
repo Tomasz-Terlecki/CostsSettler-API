@@ -5,6 +5,10 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
 namespace CostsSettler.Auth.Clients;
+
+/// <summary>
+/// Implementation of IKeycloakClient interface using Keycloak REST API.
+/// </summary>
 public class KeycloakClient : IKeycloakClient
 {
     private readonly HttpClient _httpClient;
@@ -13,6 +17,11 @@ public class KeycloakClient : IKeycloakClient
     private readonly string _clientId;
     private readonly string _clientSecret;
 
+    /// <summary>
+    /// Creates new KeycloakClientConfig instance.
+    /// </summary>
+    /// <param name="config">Keycloak client configuration.</param>
+    /// <param name="ignoreSSL">SSL requirement should be ignored (true) or not (false).</param>
     public KeycloakClient(KeycloakClientConfig config, bool ignoreSSL = false)
     {
         var handler = new HttpClientHandler();
@@ -35,6 +44,10 @@ public class KeycloakClient : IKeycloakClient
         _clientId = config.ClientId;
     }
 
+    /// <summary>
+    /// Creates access token by sending request to Keycloak.
+    /// </summary>
+    /// <returns>Created access token as string.</returns>
     public async Task<string?> GetAccessTokenAsync()
     {
         var content = new Dictionary<string, string>
@@ -59,6 +72,11 @@ public class KeycloakClient : IKeycloakClient
         return keycloakAccessToken?.AccessToken;
     }
 
+    /// <summary>
+    /// Gets users from Keycloak using REST API.
+    /// </summary>
+    /// <param name="accessToken">Access token to authenticate application.</param>
+    /// <returns>Collection of Keycloak users returned by Keycloak REST API.</returns>
     public async Task<ICollection<KcUser>?> GetUsersAsync(string accessToken)
     {
         var request = CreateRequest(
@@ -72,6 +90,12 @@ public class KeycloakClient : IKeycloakClient
         return users;
     }
 
+    /// <summary>
+    /// Gets user by given Keycloak user identifier by sending HTTP request via Keycloak REST API.
+    /// </summary>
+    /// <param name="userId">Identifier of user in Keycloak.</param>
+    /// <param name="accessToken">Access token to authenticate application.</param>
+    /// <returns></returns>
     public async Task<KcUser?> GetUserByIdAsync(Guid userId, string accessToken)
     {
         var request = CreateRequest(
