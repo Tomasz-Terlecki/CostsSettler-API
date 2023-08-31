@@ -4,12 +4,25 @@ using CostsSettler.Domain.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace CostsSettler.Repo.Repositories;
+
+/// <summary>
+/// Implementation of ICircumstanceRepository interface.
+/// </summary>
 public class CircumstanceRepository : RepositoryBase<Circumstance>, ICircumstanceRepository
 {
+    /// <summary>
+    /// Creates new CircumstanceRepository that uses DbContext.
+    /// </summary>
+    /// <param name="dbContext">DbContext used to manage circumstances data.</param>
     public CircumstanceRepository(CostsSettlerDbContext dbContext) : base(dbContext)
     {
     }
 
+    /// <summary>
+    /// Gets circumstances by parameters. Includes charges.
+    /// </summary>
+    /// <param name="parameters">Circumstances filters.</param>
+    /// <returns>Circumstances that match given filters.</returns>
     public async Task<ICollection<Circumstance>> GetByParamsAsync(GetCircumstancesByParamsQuery parameters)
     {
         var query = _dbContext.Circumstances.AsQueryable();

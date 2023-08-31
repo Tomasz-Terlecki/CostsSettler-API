@@ -4,8 +4,8 @@ namespace CostsSettler.Domain.Interfaces.Repositories;
 
 /// <summary>
 /// Interface of repository that manages domain data.
-/// Generic parameter TModel is a domain model.
 /// </summary>
+/// <typeparam name="TModel">Domain model.</typeparam>
 public interface IRepositoryBase<TModel> where TModel : ModelBase
 {
     /// <summary>

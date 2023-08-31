@@ -2,11 +2,26 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace CostsSettler.Repo;
+
+/// <summary>
+/// DbContext used in CostsSettler application.
+/// </summary>
 public class CostsSettlerDbContext : DbContext
 {
+    /// <summary>
+    /// DbSet of circumstances.
+    /// </summary>
     public DbSet<Circumstance> Circumstances { get; set; } = null!;
+    
+    /// <summary>
+    /// DbSet of charges.
+    /// </summary>
     public DbSet<Charge> Charges { get; set; } = null!;
 
+    /// <summary>
+    /// Creates new CostsSettlerDbContext instance.
+    /// </summary>
+    /// <param name="options">DbContext options.</param>
     public CostsSettlerDbContext(DbContextOptions<CostsSettlerDbContext> options) : base(options)
     {   
     }

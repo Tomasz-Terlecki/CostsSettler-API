@@ -12,6 +12,6 @@ public interface IChargeRepository : IRepositoryBase<Charge>
     /// Gets charges by parameters.
     /// </summary>
     /// <param name="parameters">Charges filters.</param>
-    /// <returns></returns>
+    /// <returns>Charges that match given filters.</returns>
     Task<ICollection<Charge>> GetByParamsAsync(GetChargesByParamsQuery parameters);
 }

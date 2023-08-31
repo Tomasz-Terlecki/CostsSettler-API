@@ -12,6 +12,6 @@ public interface ICircumstanceRepository : IRepositoryBase<Circumstance>
     /// Gets circumstances by parameters.
     /// </summary>
     /// <param name="parameters">Circumstances filters.</param>
-    /// <returns></returns>
+    /// <returns>Circumstances that match given filters.</returns>
     Task<ICollection<Circumstance>> GetByParamsAsync(GetCircumstancesByParamsQuery parameters);
 }
