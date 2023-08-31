@@ -4,8 +4,15 @@ using CostsSettler.Domain.Dtos;
 using CostsSettler.Domain.Models;
 
 namespace CostsSettler.Domain.Profiles;
+
+/// <summary>
+/// Domain AutoMapper profiles.
+/// </summary>
 public class AutoMapperProfiles : Profile
 {
+    /// <summary>
+    /// Creates AutoMapperProfiles instance.
+    /// </summary>
     public AutoMapperProfiles()
     {
         CreateMap<User, UserForListDto>();

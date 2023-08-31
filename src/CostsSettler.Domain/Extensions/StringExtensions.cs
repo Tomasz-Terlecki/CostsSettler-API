@@ -1,4 +1,8 @@
 ﻿namespace CostsSettler.Domain.Extensions;
+
+/// <summary>
+/// String extensions methods.
+/// </summary>
 public static class StringExtensions
 {
     /// <summary>
