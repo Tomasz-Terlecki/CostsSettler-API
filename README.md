@@ -2,7 +2,7 @@
 
 This is the CostsSettler application API.
 
-### How to build server Docker images:
+### How to build API Docker images:
 
 1. Clone the repository.
 2. Make sure you have Docker engine installed.
@@ -17,14 +17,14 @@ This is the CostsSettler application API.
 ### How to run the system
 
 1. Add `127.0.0.1 costssettler.com` to your `hosts` file. It is needed to make "Login with Google" work properly. Google auth services require a [top-level domain](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains) like `.com`, `.org` etc.
-2. Build server images (instructions above).
+2. Build API images (instructions above).
 3. Build client app image (instructions above).
 4. Set some environment variables:
    * `SA_PASSWORD` in `./src/costs-settler-api.env` and `./src/mssql.env` -- password to MS SQL Server.
    * `KeycloakClientConfig__Secret` in `./src/costs-settler-api.env` -- CostsSettler-API client secret.
    * `COSTSSETTLER_API_SECRET` in `./src/keycloak.env` -- same value as in `KeycloakClientConfig__Secret`.
    * `KEYCLOAK_ADMIN_PASSWORD` in `./src/keycloak.env` -- password to keycloak admin panel.
-5. Run command `docker compose up -d` in `./src` folder of server application repository.
+5. Run command `docker compose up -d` in `./src` folder of API application repository.
 6. All containers should be started automatically.
    * Keycloak configuration should import automatically.
    * `CostsSettler-API` database should migrate automatically on `costs-settler-api` container startup.
