@@ -14,6 +14,9 @@ using Moq;
 
 namespace CostsSettler.Tests.Domain.Queries.Users;
 
+/// <summary>
+/// Tests of GetUsersByParamsQuery query.
+/// </summary>
 public class GetUsersByParamsQueryTests
 {
     private Mock<ICircumstanceRepository> _circumstanceRepositoryMock { get; }
@@ -25,6 +28,9 @@ public class GetUsersByParamsQueryTests
     private RandomCircumstanceFactory _randomCircumstanceFactory { get; }
     private RandomUserFactory _randomUserFactory { get; }
 
+    /// <summary>
+    /// Creates new GetUsersByParamsQueryTests instance.
+    /// </summary>
     public GetUsersByParamsQueryTests()
     {
         _circumstanceRepositoryMock = new Mock<ICircumstanceRepository>();
@@ -40,6 +46,9 @@ public class GetUsersByParamsQueryTests
         _randomUserFactory = new RandomUserFactory();
     }
 
+    /// <summary>
+    /// Tests getting users by params for success scenario.
+    /// </summary>
     [Fact]
     public void GetUsersByParams_Success_Test()
     {

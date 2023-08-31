@@ -7,6 +7,10 @@ using CostsSettler.Tests.Helpers;
 using Moq;
 
 namespace CostsSettler.Tests.Domain.Queries.Circumstances;
+
+/// <summary>
+/// Tests of GetCircumstanceByIdQuery query.
+/// </summary>
 public class GetCircumstanceByIdQueryTests
 {
     private Mock<ICircumstanceRepository> _circumstanceRepositoryMock { get; }
@@ -17,6 +21,9 @@ public class GetCircumstanceByIdQueryTests
     private RandomCircumstanceFactory _randomCircumstanceFactory { get; }
     private RandomUserFactory _randomUserFactory { get; }
 
+    /// <summary>
+    /// Creates new GetCircumstanceByIdQueryTests instance.
+    /// </summary>
     public GetCircumstanceByIdQueryTests()
     {
         _circumstanceRepositoryMock = new Mock<ICircumstanceRepository>();
@@ -28,6 +35,9 @@ public class GetCircumstanceByIdQueryTests
         _randomUserFactory = new RandomUserFactory();
     }
 
+    /// <summary>
+    /// Tests getting circumstance by id for existing circumstance.
+    /// </summary>
     [Fact]
     public void GetCircumstanceById_CircumstanceExists_Test()
     {
@@ -100,6 +110,9 @@ public class GetCircumstanceByIdQueryTests
         Assert.Equal(result, circumstance);
     }
 
+    /// <summary>
+    /// Tests getting circumstance by id for circumstance that does not exist.
+    /// </summary>
     [Fact]
     public void GetCircumstanceById_CircumstanceDoesNotExist_Test()
     {
@@ -169,6 +182,9 @@ public class GetCircumstanceByIdQueryTests
         Assert.Contains(circumstanceId.ToString(), ex.Message);
     }
 
+    /// <summary>
+    /// Tests getting circumstance by id for unauthorized user.
+    /// </summary>
     [Fact]
     public void GetCircumstanceById_UserUnauthorized_Test()
     {
@@ -240,6 +256,9 @@ public class GetCircumstanceByIdQueryTests
             repo.GetByIdAsync(circumstanceId, It.IsAny<string[]>()), Times.Once);
     }
 
+    /// <summary>
+    /// Tests getting circumstance by id for circumstance's creditor not found.
+    /// </summary>
     [Fact]
     public void GetCircumstanceById_CreditorNotFound_Test()
     {
@@ -313,6 +332,9 @@ public class GetCircumstanceByIdQueryTests
         Assert.Contains(creditorId1.ToString(), ex.Message);
     }
 
+    /// <summary>
+    /// Tests getting circumstance by id for circumstance's debtor not found.
+    /// </summary>
     [Fact]
     public void GetCircumstanceById_DebtorNotFound_Test()
     {

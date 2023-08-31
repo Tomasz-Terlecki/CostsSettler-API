@@ -10,6 +10,10 @@ using MediatR;
 using Moq;
 
 namespace CostsSettler.Tests.Domain.Commands.Charges;
+
+/// <summary>
+/// Tests for VoteForChargeCommand command.
+/// </summary>
 public class VoteForChargeCommandTests
 {
     private Mock<IChargeRepository> _chargeRepositoryMock { get; }
@@ -22,6 +26,9 @@ public class VoteForChargeCommandTests
     private RandomCircumstanceFactory _randomCircumstanceFactory { get; }
     private RandomUserFactory _randomUserFactory { get; }
 
+    /// <summary>
+    /// Creates new VoteForChargeCommandTests.
+    /// </summary>
     public VoteForChargeCommandTests()
     {
         _chargeRepositoryMock = new Mock<IChargeRepository>();
@@ -35,6 +42,12 @@ public class VoteForChargeCommandTests
         _randomUserFactory = new RandomUserFactory();
     }
 
+    /// <summary>
+    /// Tests vote for charge functionality for valid circumstance status and charge status.
+    /// </summary>
+    /// <param name="chargeStatus">Status of charge to be settled.</param>
+    /// <param name="circumstanceStatus">Status of circumstance to be settled.</param>
+    /// <param name="chargeVote">Vote of charge to be processed.</param>
     [Theory]
     [InlineData(ChargeStatus.None, CircumstanceStatus.None, ChargeVote.Accept)]
     [InlineData(ChargeStatus.None, CircumstanceStatus.None, ChargeVote.Reject)]
@@ -114,6 +127,12 @@ public class VoteForChargeCommandTests
         Assert.True(result);
     }
 
+    /// <summary>
+    /// Tests vote for charge functionality for invalid circumstance status or charge status.
+    /// </summary>
+    /// <param name="chargeStatus">Status of charge to be settled.</param>
+    /// <param name="circumstanceStatus">Status of circumstance to be settled.</param>
+    /// <param name="chargeVote">Vote of charge to be processed.</param>
     [Theory]
     [InlineData(ChargeStatus.Settled, CircumstanceStatus.PartiallyAccepted, ChargeVote.Reject)]
     [InlineData(ChargeStatus.New, CircumstanceStatus.Settled, ChargeVote.Reject)]
@@ -172,6 +191,9 @@ public class VoteForChargeCommandTests
             repo.UpdateAsync(It.IsAny<Charge>()), Times.Never);
     }
 
+    /// <summary>
+    /// Tests vote for charge functionality for invalid charge vote.
+    /// </summary>
     [Fact]
     public void VoteForCharge_InValidChargeVote_Test()
     {

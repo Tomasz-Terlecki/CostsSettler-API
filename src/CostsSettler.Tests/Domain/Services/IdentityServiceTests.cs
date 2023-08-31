@@ -6,17 +6,27 @@ using Moq;
 using System.Security.Claims;
 
 namespace CostsSettler.Tests.Domain.Services;
+
+/// <summary>
+/// Tests of IdentityService service.
+/// </summary>
 public class IdentityServiceTests
 {
     private Mock<IHttpContextAccessor> _httpContextAccessorMock { get; }
     private Mock<HttpContext> _httpContextMock { get; }
 
+    /// <summary>
+    /// Creates new IdentityServiceTests instance.
+    /// </summary>
     public IdentityServiceTests()
     {
         _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
         _httpContextMock = new Mock<HttpContext>();
     }
 
+    /// <summary>
+    /// Checks equality with logged user id for authorized user.
+    /// </summary>
     [Fact]
     public void CheckEqualityWithLoggedUserId_AuthorizedUser_Test()
     {
@@ -35,6 +45,9 @@ public class IdentityServiceTests
         identityService.CheckEqualityWithLoggedUserId(userId);
     }
 
+    /// <summary>
+    /// Checks equality with logged user id for unauthorized user.
+    /// </summary>
     [Fact]
     public void CheckEqualityWithLoggedUserId_UnauthorizedUser_Test()
     {
@@ -54,6 +67,9 @@ public class IdentityServiceTests
             () => identityService.CheckEqualityWithLoggedUserId(Guid.NewGuid()));
     }
 
+    /// <summary>
+    /// Checks given user id is one of a list of user ids for authorized user.
+    /// </summary>
     [Fact]
     public void CheckIfLoggedUserIsOneOf_AuthorizedUser_Test()
     {
@@ -73,6 +89,9 @@ public class IdentityServiceTests
         identityService.CheckIfLoggedUserIsOneOf(userIds);
     }
 
+    /// <summary>
+    /// Checks given user id is one of a list of user ids for unauthorized user.
+    /// </summary>
     [Fact]
     public void CheckIfLoggedUserIsOneOf_UnauthorizedUser_Test()
     {

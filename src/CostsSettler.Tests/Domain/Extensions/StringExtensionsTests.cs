@@ -1,8 +1,19 @@
 ﻿using CostsSettler.Domain.Extensions;
 
 namespace CostsSettler.Tests.Domain.Extensions;
+
+/// <summary>
+/// Tests the StringExtensions class.
+/// </summary>
 public class StringExtensionsTests
 {
+    /// <summary>
+    /// Tests ToDateOnly with valid date string.
+    /// </summary>
+    /// <param name="dateString">Date string to parse.</param>
+    /// <param name="year">Expected year.</param>
+    /// <param name="month">Expected month.</param>
+    /// <param name="day">Expected day.</param>
     [Theory]
     [InlineData("2023-08-25", 2023, 8, 25)]
     [InlineData("2023-8-25", 2023, 8, 25)]
@@ -16,6 +27,10 @@ public class StringExtensionsTests
         Assert.Equal(new DateOnly(year, month, day), result);
     }
 
+    /// <summary>
+    /// Tests ToDateOnly with invalid date string.
+    /// </summary>
+    /// <param name="dateString">Date string to parse.</param>
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
@@ -35,6 +50,12 @@ public class StringExtensionsTests
         Assert.Null(result);
     }
 
+    /// <summary>
+    /// Tests ToTimeOnly with valid time string.
+    /// </summary>
+    /// <param name="timeString">Time string to parse.</param>
+    /// <param name="hour">Expected hour.</param>
+    /// <param name="minute">Expected minute.</param>
     [Theory]
     [InlineData("1:1", 1, 1)]
     [InlineData("01:01", 1, 1)]
@@ -47,6 +68,10 @@ public class StringExtensionsTests
         Assert.Equal(new TimeOnly(hour, minute), result);
     }
 
+    /// <summary>
+    /// Tests ToTimeOnly with invalid time string.
+    /// </summary>
+    /// <param name="timeString">Time string to parse.</param>
     [Theory]
     [InlineData("1::1")]
     [InlineData("1:")]

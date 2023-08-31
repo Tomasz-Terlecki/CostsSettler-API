@@ -9,6 +9,10 @@ using CostsSettler.Tests.Helpers;
 using Moq;
 
 namespace CostsSettler.Tests.Domain.Queries.Charges;
+
+/// <summary>
+/// Tests of GetChargesByParamsQueryTests query.
+/// </summary>
 public class GetChargesByParamsQueryTests
 {
     private Mock<IChargeRepository> _chargeRepositoryMock { get; }
@@ -17,6 +21,9 @@ public class GetChargesByParamsQueryTests
 
     private RandomChargeFactory _randomChargeFactory { get; }
 
+    /// <summary>
+    /// Creates new GetChargesByParamsQueryTests instance.
+    /// </summary>
     public GetChargesByParamsQueryTests()
     {
         _chargeRepositoryMock = new Mock<IChargeRepository>();
@@ -29,6 +36,9 @@ public class GetChargesByParamsQueryTests
         _randomChargeFactory = new RandomChargeFactory();
     }
 
+    /// <summary>
+    /// Tests getting charges by parameters. Success scenario.
+    /// </summary>
     [Fact]
     public void GetChargesByParams_Success_Test()
     {
@@ -64,6 +74,9 @@ public class GetChargesByParamsQueryTests
             Assert.Contains(item, expected);
     }
 
+    /// <summary>
+    /// Tests getting charges by parameters for unauthorized user.
+    /// </summary>
     [Fact]
     public void GetChargesByParams_UserUnauthorized_Test()
     {

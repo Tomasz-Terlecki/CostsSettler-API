@@ -10,6 +10,10 @@ using MediatR;
 using Moq;
 
 namespace CostsSettler.Tests.Domain.Commands.Charges;
+
+/// <summary>
+/// Tests for SettlerChargeCommand command.
+/// </summary>
 public class SettleChargeCommandTests
 {
     private Mock<IChargeRepository> _chargeRepositoryMock { get; }
@@ -22,6 +26,9 @@ public class SettleChargeCommandTests
     private RandomCircumstanceFactory _randomCircumstanceFactory { get; }
     private RandomUserFactory _randomUserFactory { get; }
 
+    /// <summary>
+    /// Creates new SettleChargeCommandTests.
+    /// </summary>
     public SettleChargeCommandTests()
     {
         _chargeRepositoryMock = new Mock<IChargeRepository>();
@@ -35,6 +42,11 @@ public class SettleChargeCommandTests
         _randomUserFactory = new RandomUserFactory();
     }
 
+    /// <summary>
+    /// Tests settle charge functionality for valid charge status and circumstance status.
+    /// </summary>
+    /// <param name="chargeStatus">Status of charge to be settled.</param>
+    /// <param name="circumstanceStatus">Status of circumstance to be settled.</param>
     [Theory]
     [InlineData(ChargeStatus.Accepted, CircumstanceStatus.Accepted)]
     [InlineData(ChargeStatus.Accepted, CircumstanceStatus.PartiallySettled)]
@@ -101,6 +113,11 @@ public class SettleChargeCommandTests
         Assert.True(result);
     }
 
+    /// <summary>
+    /// Tests settle charge functionality for invalid charge status or circumstance status.
+    /// </summary>
+    /// <param name="chargeStatus">Status of charge to be settled.</param>
+    /// <param name="circumstanceStatus">Status of circumstance to be settled.</param>
     [Theory]
     [InlineData(ChargeStatus.None, CircumstanceStatus.Accepted)]
     [InlineData(ChargeStatus.New, CircumstanceStatus.Accepted)]
@@ -169,6 +186,9 @@ public class SettleChargeCommandTests
             () => commandHandler.Handle(command, CancellationToken.None));
     }
 
+    /// <summary>
+    /// Tests settle charge functionality for unauthorized user.
+    /// </summary>
     [Fact]
     public void SettleCharge_UnauthorizedUser_Test()
     {

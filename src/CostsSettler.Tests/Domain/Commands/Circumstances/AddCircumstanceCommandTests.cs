@@ -8,6 +8,9 @@ using Moq;
 
 namespace CostsSettler.Tests.Domain.Commands.Circumstances;
 
+/// <summary>
+/// Tests for AddCircumstanceCommand command.
+/// </summary>
 public class AddCircumstanceCommandTests
 {
     private Mock<IChargeRepository> _chargeRepositoryMock { get; }
@@ -18,6 +21,9 @@ public class AddCircumstanceCommandTests
     private RandomChargeFactory _randomChargeFactory { get; }
     private RandomUserFactory _randomUserFactory { get; }
 
+    /// <summary>
+    /// Creates new AddCircumstanceCommandTests.
+    /// </summary>
     public AddCircumstanceCommandTests()
     {
         _chargeRepositoryMock = new Mock<IChargeRepository>();
@@ -29,6 +35,9 @@ public class AddCircumstanceCommandTests
         _randomUserFactory = new RandomUserFactory();
     }
 
+    /// <summary>
+    /// Tests adding circumstance with valid data.
+    /// </summary>
     [Fact]
     public void AddCircumstance_Success_Test()
     {
@@ -79,6 +88,9 @@ public class AddCircumstanceCommandTests
         Assert.True(result);
     }
 
+    /// <summary>
+    /// Tests adding circumstance with debtors list containing creditor.
+    /// </summary>
     [Fact]
     public void AddCircumstance_DebtorsListContainsCreditor_Test()
     {
@@ -121,6 +133,9 @@ public class AddCircumstanceCommandTests
             () => commandHandler.Handle(command, CancellationToken.None));
     }
 
+    /// <summary>
+    /// Tests adding circumstance with debtor that does not exist.
+    /// </summary>
     [Fact]
     public void AddCircumstance_DebtorDoesNotExist_Test()
     {
@@ -168,6 +183,9 @@ public class AddCircumstanceCommandTests
             () => commandHandler.Handle(command, CancellationToken.None));
     }
 
+    /// <summary>
+    /// Tests adding circumstance with empty debtor id.
+    /// </summary>
     [Fact]
     public void AddCircumstance_DebtorIdEmpty_Test()
     {
@@ -211,6 +229,9 @@ public class AddCircumstanceCommandTests
             () => commandHandler.Handle(command, CancellationToken.None));
     }
 
+    /// <summary>
+    /// Tests adding circumstance with creditor that does not exist.
+    /// </summary>
     [Fact]
     public void AddCircumstance_CreditorDoesNotExist_Test()
     {
@@ -257,6 +278,9 @@ public class AddCircumstanceCommandTests
             () => commandHandler.Handle(command, CancellationToken.None));
     }
 
+    /// <summary>
+    /// Tests adding circumstance with empty creditor id.
+    /// </summary>
     [Fact]
     public void AddCircumstance_CreditorIdEmpty_Test()
     {

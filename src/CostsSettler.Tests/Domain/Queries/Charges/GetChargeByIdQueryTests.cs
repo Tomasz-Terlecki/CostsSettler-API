@@ -8,6 +8,10 @@ using CostsSettler.Tests.Helpers;
 using Moq;
 
 namespace CostsSettler.Tests.Domain.Queries.Charges;
+
+/// <summary>
+/// Tests of GetChargeByIdQuery query.
+/// </summary>
 public class GetChargeByIdQueryTests
 {
     private Mock<IChargeRepository> _chargeRepositoryMock { get; }
@@ -17,6 +21,9 @@ public class GetChargeByIdQueryTests
     private RandomChargeFactory _randomChargeFactory { get; }
     private RandomUserFactory _randomUserFactory { get; }
 
+    /// <summary>
+    /// Creates new GetChargeByIdQueryTests instance.
+    /// </summary>
     public GetChargeByIdQueryTests()
     {
         _chargeRepositoryMock = new Mock<IChargeRepository>();
@@ -27,6 +34,9 @@ public class GetChargeByIdQueryTests
         _randomUserFactory = new RandomUserFactory();
     }
 
+    /// <summary>
+    /// Tests getting charge by id for exising charge.
+    /// </summary>
     [Fact]
     public void GetChargeById_ChargeExists_Test()
     {
@@ -75,6 +85,9 @@ public class GetChargeByIdQueryTests
         Assert.Equal(result, charge);
     }
 
+    /// <summary>
+    /// Tests getting charge by id for not exising charge.
+    /// </summary>
     [Fact]
     public void GetChargeById_ChargeDoesNotExist_Test()
     {
@@ -117,6 +130,9 @@ public class GetChargeByIdQueryTests
         Assert.Contains(chargeId.ToString(), ex.Message);
     }
 
+    /// <summary>
+    /// Tests getting charge by id for unauthorized user.
+    /// </summary>
     [Fact]
     public void GetChargeById_UserUnauthorized_Test()
     {
@@ -161,6 +177,9 @@ public class GetChargeByIdQueryTests
             () => queryHandler.Handle(query, CancellationToken.None));
     }
 
+    /// <summary>
+    /// Tests getting charge with creditor that is not found.
+    /// </summary>
     [Fact]
     public void GetChargeById_CreditorNotFound_Test()
     {
@@ -206,6 +225,9 @@ public class GetChargeByIdQueryTests
         Assert.Contains(creditorId.ToString(), ex.Message);
     }
 
+    /// <summary>
+    /// Tests getting charge with debtor that is not found.
+    /// </summary>
     [Fact]
     public void GetChargeById_DebtorNotFound_Test()
     {

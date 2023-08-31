@@ -10,6 +10,9 @@ using Moq;
 
 namespace CostsSettler.Tests.Domain.Queries.Circumstances;
 
+/// <summary>
+/// Tests of GetCircumstancesByParamsQuery query.
+/// </summary>
 public class GetCircumstancesByParamsQueryTests
 {
     private Mock<ICircumstanceRepository> _circumstanceRepositoryMock { get; }
@@ -21,6 +24,9 @@ public class GetCircumstancesByParamsQueryTests
     private RandomCircumstanceFactory _randomCircumstanceFactory { get; }
     private RandomUserFactory _randomUserFactory { get; }
 
+    /// <summary>
+    /// Creates new GetCircumstancesByParamsQueryTests instance.
+    /// </summary>
     public GetCircumstancesByParamsQueryTests()
     {
         _circumstanceRepositoryMock = new Mock<ICircumstanceRepository>();
@@ -36,6 +42,9 @@ public class GetCircumstancesByParamsQueryTests
         _randomUserFactory = new RandomUserFactory();
     }
 
+    /// <summary>
+    /// Tests getting circumstances by params for success scenario.
+    /// </summary>
     [Fact]
     public void GetCircumstancesByParams_Success_Test()
     {
@@ -71,6 +80,9 @@ public class GetCircumstancesByParamsQueryTests
             Assert.Contains(item, expected);
     }
 
+    /// <summary>
+    /// Tests getting circumstances by params for unauthorized user.
+    /// </summary>
     [Fact]
     public void GetCircumstancesByParams_UserUnauthorized_Test()
     {
