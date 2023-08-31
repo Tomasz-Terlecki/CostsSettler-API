@@ -11,8 +11,7 @@ public class RandomUserFactory : RandomFactoryBase<User, UserAttributes>
             FirstName = attributes?.FirstName ?? "firstName" + id.ToString(),
             LastName = attributes?.LastName ?? "lastName" + id.ToString(),
             Email = attributes?.Email ?? "email" + id.ToString(),
-            Username = attributes?.Username ?? "username" + id.ToString(),
-            Charges = attributes?.Charges ?? new List<Charge>()
+            Username = attributes?.Username ?? "username" + id.ToString()
         };
     }
 }
@@ -23,5 +22,4 @@ public class UserAttributes
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? Email { get; set; }
-    public ICollection<Charge>? Charges { get; set; }
 }

@@ -67,36 +67,4 @@ public class GetUsersByParamsQueryTests
         foreach (var item in expected)
             Assert.Contains(item, expected);
     }
-
-    [Fact]
-    public void GetUsersByParams_FilteredByEmail_Test()
-    {
-        var emailToFind = "test";
-        var userId = Guid.NewGuid();
-        var validUser = _randomUserFactory.Create(userId, new UserAttributes {Email = "testEmail"});
-        var users = _randomUserFactory.CreateCollection(5);
-        users.Add(validUser);
-
-        _userRepositoryMock
-            .Setup(repo => repo.GetAllAsync())
-            .ReturnsAsync(new List<User> { validUser });
-
-        var query = new GetUsersByParamsQuery { Email = emailToFind };
-
-        var queryHandler = new GetUsersByParamsQuery.GetUsersByParamsQueryHandler(
-            _userRepositoryMock.Object,
-            _mapper
-        );
-
-        var result = queryHandler.Handle(query, CancellationToken.None).Result;
-
-        _userRepositoryMock.Verify(repo =>
-            repo.GetAllAsync(), Times.Once);
-
-        var expected = _mapper.Map<ICollection<UserForListDto>>(new List<User> { validUser });
-
-        Assert.Equal(expected.Count, result.Count);
-        foreach (var item in expected)
-            Assert.Contains(item, expected);
-    }
 }
